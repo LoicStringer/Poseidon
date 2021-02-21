@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.poseidon.dto.RuleDto;
 import com.poseidon.entity.Rule;
-import com.poseidon.mappers.RuleMapper;
+import com.poseidon.mapper.RuleMapper;
 import com.poseidon.repository.RuleRepository;
 
 @Service

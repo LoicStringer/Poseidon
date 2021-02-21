@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.poseidon.dto.BidDto;
 import com.poseidon.entity.Bid;
-import com.poseidon.mappers.BidMapper;
+import com.poseidon.mapper.BidMapper;
 import com.poseidon.repository.BidRepository;
 
 @Service

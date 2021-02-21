@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.poseidon.dto.TradeDto;
 import com.poseidon.entity.Trade;
-import com.poseidon.mappers.TradeMapper;
+import com.poseidon.mapper.TradeMapper;
 import com.poseidon.repository.TradeRepository;
 
 @Service

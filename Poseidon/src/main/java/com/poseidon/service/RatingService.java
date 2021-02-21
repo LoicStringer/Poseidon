@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.poseidon.dto.RatingDto;
 import com.poseidon.entity.Rating;
-import com.poseidon.mappers.RatingMapper;
+import com.poseidon.mapper.RatingMapper;
 import com.poseidon.repository.RatingRepository;
 
 @Service

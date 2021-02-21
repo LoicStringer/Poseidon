@@ -1,4 +1,4 @@
-package com.poseidon.mappers;
+package com.poseidon.mapper;
 
 import org.mapstruct.Mapper;
 

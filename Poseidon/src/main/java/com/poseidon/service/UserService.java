@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.poseidon.dto.UserDto;
 import com.poseidon.entity.User;
-import com.poseidon.mappers.UserMapper;
+import com.poseidon.mapper.UserMapper;
 import com.poseidon.repository.UserRepository;
 
 @Service

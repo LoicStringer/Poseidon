@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.poseidon.dto.CurvePointDto;
 import com.poseidon.entity.CurvePoint;
-import com.poseidon.mappers.CurvePointMapper;
+import com.poseidon.mapper.CurvePointMapper;
 import com.poseidon.repository.CurvePointRepository;
 
 @Service
