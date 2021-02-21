@@ -15,7 +15,7 @@ import com.poseidon.repository.BidRepository;
 @Service
 public class BidService {
 
-	private BidMapper bidMapper = Mappers.getMapper(BidMapper.class); 
+	private BidMapper bidMapper; 
 	
 	@Autowired
 	private BidRepository bidRepository;

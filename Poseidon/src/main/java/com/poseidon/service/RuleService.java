@@ -15,7 +15,7 @@ import com.poseidon.repository.RuleRepository;
 @Service
 public class RuleService {
 
-	private RuleMapper ruleMapper = Mappers.getMapper(RuleMapper.class);
+	private RuleMapper ruleMapper ;
 	
 	@Autowired
 	private RuleRepository ruleRepository;

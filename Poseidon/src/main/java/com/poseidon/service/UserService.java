@@ -16,14 +16,15 @@ import com.poseidon.repository.UserRepository;
 @Service
 public class UserService {
 	
-	private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+	private UserMapper userMapper ;
 
 	@Autowired
 	private UserRepository userRepository;
 	
+	/*
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+	*/
 	public List<UserDto> getAllUsers(){
 		List<User> users = userRepository.findAll();
 		List<UserDto> usersDto = users.stream()
@@ -33,7 +34,7 @@ public class UserService {
 	}
 	
 	public UserDto create(UserDto userToCreate) {
-		userToCreate.setUserPassword(bCryptPasswordEncoder.encode(userToCreate.getUserPassword()));
+		//userToCreate.setUserPassword(bCryptPasswordEncoder.encode(userToCreate.getUserPassword()));
 		userRepository.save(userMapper.userDtoToUser(userToCreate));
 		return userToCreate ;
 	}
@@ -43,7 +44,7 @@ public class UserService {
 	}
 	
 	public UserDto update(UserDto userToUpdate) {
-		userToUpdate.setUserPassword(bCryptPasswordEncoder.encode(userToUpdate.getUserPassword()));
+		//userToUpdate.setUserPassword(bCryptPasswordEncoder.encode(userToUpdate.getUserPassword()));
 		userRepository.save(userMapper.userDtoToUser(userToUpdate));
 		return userToUpdate ;
 	}

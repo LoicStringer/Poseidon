@@ -15,7 +15,7 @@ import com.poseidon.repository.TradeRepository;
 @Service
 public class TradeService {
 
-	private TradeMapper tradeMapper = Mappers.getMapper(TradeMapper.class);
+	private TradeMapper tradeMapper ;
 	
 	@Autowired
 	private TradeRepository tradeRepository;

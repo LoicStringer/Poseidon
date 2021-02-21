@@ -15,7 +15,7 @@ import com.poseidon.repository.RatingRepository;
 @Service
 public class RatingService {
 
-	private RatingMapper ratingMapper = Mappers.getMapper(RatingMapper.class);
+	private RatingMapper ratingMapper ;
 	
 	@Autowired
 	private RatingRepository ratingRepository;

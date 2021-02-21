@@ -15,7 +15,7 @@ import com.poseidon.repository.CurvePointRepository;
 @Service
 public class CurvePointService {
 
-	private CurvePointMapper curvePointMapper = Mappers.getMapper(CurvePointMapper.class);
+	private CurvePointMapper curvePointMapper;
 	
 	@Autowired
 	private CurvePointRepository curvePointRepository;
