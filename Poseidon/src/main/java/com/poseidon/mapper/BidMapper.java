@@ -1,7 +1,6 @@
 package com.poseidon.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import com.poseidon.dto.BidDto;
 import com.poseidon.entity.Bid;
