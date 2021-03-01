@@ -3,7 +3,6 @@ package com.poseidon.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +14,15 @@ import com.poseidon.repository.BidRepository;
 @Service
 public class BidService {
 
+	@Autowired
 	private BidMapper bidMapper; 
 	
 	@Autowired
 	private BidRepository bidRepository;
 	
 	public List<BidDto> getAllBids(){
-		List<Bid> bids = bidRepository.findAll();
-		List<BidDto> bidsDto = bids.stream()
+		List<Bid> bidsList = bidRepository.findAll();
+		List<BidDto> bidsDto = bidsList.stream()
 				.map(b-> bidMapper.bidToBidDto(b))
 				.collect(Collectors.toList());
 		return bidsDto;

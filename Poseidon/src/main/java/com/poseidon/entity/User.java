@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @SequenceGenerator(name="seq")
 @Entity
@@ -23,8 +24,8 @@ public class User {
     @Column(name="user_name",length = 125)
     private String userName;
     
-  //@Pattern(regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\\]).{8,32}$",
-  //message = "Password must contains at least 8 characters, an upper-case letter, a digit and a symbol.")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\\]).{8,32}$",
+    		message = "Password must contains at least 8 characters, an upper-case letter, a digit and a symbol.")
     @NotBlank(message = "Password is mandatory")
     @Column(name="user_password",length = 125)
     private String userPassword;

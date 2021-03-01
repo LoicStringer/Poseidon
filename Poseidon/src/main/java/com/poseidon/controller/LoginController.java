@@ -1,11 +1,17 @@
 package com.poseidon.controller;
 
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LoginController {
 
+	@RequestMapping("/login")
+	public String login() {
+		return "Login page";
+	}
 	
 	@RequestMapping("/admin")
 	//@RolesAllowed("ADMIN")
@@ -13,8 +19,8 @@ public class LoginController {
 		return "Welcome, admin";
 	}
 	
-	//@RolesAllowed("USER")
 	@RequestMapping("/user")
+	//@RolesAllowed("USER")
 	public String greetUser() {
 		return "Welcome, user";
 	}

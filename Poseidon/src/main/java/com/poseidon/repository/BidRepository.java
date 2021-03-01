@@ -7,5 +7,8 @@ import com.poseidon.entity.Bid;
 
 
 public interface BidRepository extends JpaRepository<Bid, Integer> {
-
+	
+	
+	
+	
 }
