@@ -20,6 +20,8 @@ public class PoseidonResourceServer extends ResourceServerConfigurerAdapter {
 	            .authorizeRequests()
 	                .antMatchers("/","/home","/register","/login").permitAll()
 	                .antMatchers("/admin","/user").authenticated();
+	        
+	        //hasRole() instead of authenticated();
 	    }
 	
 

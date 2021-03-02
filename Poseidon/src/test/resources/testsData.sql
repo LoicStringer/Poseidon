@@ -1,0 +1,2 @@
+INSERT INTO user (user_id, user_fullname, user_name, user_password) VALUES (1, "Tony.Monatana", "Tony", "$2y$10$mp0UK/hRFQ57hBluSGY5ou9jC1xG66XnpgbLHVtFrc5J7IGxF/uz6", "ADMIN");
+INSERT INTO user (user_id, user_fullname, user_name, user_password) VALUES (2, "Franck.Serpico", "Franck", "$2y$10$dJVisOd9SG5YFucSVbgPF.9Lm1QoJS4Saie0faM/RXjZT0kdDqmy6", "USER");
