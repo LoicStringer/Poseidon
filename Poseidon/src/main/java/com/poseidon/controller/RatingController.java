@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.RatingDto;
+import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.RatingService;
 
 @RestController
@@ -36,7 +37,7 @@ public class RatingController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<RatingDto> getOneRating (@PathVariable Integer id){
+	public ResponseEntity<RatingDto> getOneRating (@PathVariable Integer id) throws ResourceNotFoundException{
 		log.info("User has entered \"/ratings\" endpoint to get one rating identified by " + id);
 		return ResponseEntity.ok(ratingService.read(id));
 	}
@@ -48,13 +49,13 @@ public class RatingController {
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<RatingDto> updateRating(@RequestBody @Valid RatingDto ratingToUpdate){
+	public ResponseEntity<RatingDto> updateRating(@RequestBody @Valid RatingDto ratingToUpdate) throws ResourceNotFoundException{
 		log.info("User has entered \"/ratings\" endpoint to update a rating identified by " + ratingToUpdate.getRatingId());
 		return ResponseEntity.ok(ratingService.update(ratingToUpdate));
 	}
 	
 	@DeleteMapping("")
-	public ResponseEntity<RatingDto> deleteRating(@RequestBody @Valid RatingDto ratingToDelete){
+	public ResponseEntity<RatingDto> deleteRating(@RequestBody @Valid RatingDto ratingToDelete) throws ResourceNotFoundException{
 		log.info("User has entered \"/ratings\" endpoint to delete a Rating identified by " + ratingToDelete.getRatingId());
 		return ResponseEntity.ok(ratingService.delete(ratingToDelete));
 	}

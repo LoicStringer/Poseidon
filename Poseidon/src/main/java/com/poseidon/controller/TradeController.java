@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.TradeDto;
+import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.TradeService;
 
 @RestController
@@ -36,7 +37,7 @@ public class TradeController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<TradeDto> getOneTrade(@PathVariable Integer id){
+	public ResponseEntity<TradeDto> getOneTrade(@PathVariable Integer id) throws ResourceNotFoundException{
 		log.info("User has entered \"/trades\" endpoint to get one trade identified by " + id);
 		return ResponseEntity.ok(tradeService.read(id));
 	}
@@ -48,13 +49,13 @@ public class TradeController {
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<TradeDto> updateTrade(@RequestBody @Valid TradeDto tradeToUpdate){
+	public ResponseEntity<TradeDto> updateTrade(@RequestBody @Valid TradeDto tradeToUpdate) throws ResourceNotFoundException{
 		log.info("User has entered \"/trades\" endpoint to update a trade identified by " + tradeToUpdate.getTradeId());
 		return ResponseEntity.ok(tradeService.update(tradeToUpdate));
 	}
 	
 	@DeleteMapping("")
-	public ResponseEntity<TradeDto> deleteTrade(@RequestBody @Valid TradeDto tradeToDelete){
+	public ResponseEntity<TradeDto> deleteTrade(@RequestBody @Valid TradeDto tradeToDelete) throws ResourceNotFoundException{
 		log.info("User has entered \"/trades\" endpoint to delete a trade identified by " + tradeToDelete.getTradeId());
 		return ResponseEntity.ok(tradeService.delete(tradeToDelete));
 	}

@@ -3,18 +3,23 @@ package com.poseidon.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.poseidon.dto.RuleDto;
 import com.poseidon.entity.Rule;
+import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.mapper.RuleMapper;
 import com.poseidon.repository.RuleRepository;
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 public class RuleService {
 
+	@Autowired
 	private RuleMapper ruleMapper ;
 	
 	@Autowired
@@ -33,16 +38,20 @@ public class RuleService {
 		return ruleToCreate ;
 	}
 	
-	public RuleDto read(Integer id) {
-		return ruleMapper.ruleToRuleDto(ruleRepository.findById(id).orElse(null));
+	public RuleDto read(Integer id) throws ResourceNotFoundException {
+		return ruleMapper.ruleToRuleDto(ruleRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Rule not found")));
 	}
 	
-	public RuleDto update (RuleDto ruleToUpdate) {
+	public RuleDto update (RuleDto ruleToUpdate) throws ResourceNotFoundException {
+		if(!ruleRepository.existsById(ruleToUpdate.getRuleId()))
+			throw new ResourceNotFoundException("Rule not found");
 		ruleRepository.save(ruleMapper.ruleDtoToRule(ruleToUpdate));
 		return ruleToUpdate ;
 	}
 	
-	public RuleDto  delete(RuleDto ruleToDelete) {
+	public RuleDto  delete(RuleDto ruleToDelete) throws ResourceNotFoundException {
+		if(!ruleRepository.existsById(ruleToDelete.getRuleId()))
+			throw new ResourceNotFoundException("Rule not found");
 		ruleRepository.delete(ruleMapper.ruleDtoToRule(ruleToDelete));
 		return ruleToDelete;
 	}

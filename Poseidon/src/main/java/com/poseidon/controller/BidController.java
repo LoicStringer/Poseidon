@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.BidDto;
+import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.BidService;
 
 @RestController
@@ -37,7 +38,7 @@ public class BidController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<BidDto> getOneBid(@PathVariable Integer id){
+	public ResponseEntity<BidDto> getOneBid(@PathVariable Integer id) throws ResourceNotFoundException{
 		log.info("User has entered \"/bids\" endpoint to get one bid identified by " + id);
 		return ResponseEntity.ok(bidService.read(id));
 	}
@@ -49,13 +50,13 @@ public class BidController {
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<BidDto> updateBid(@RequestBody @Valid BidDto bidToUpdate){
+	public ResponseEntity<BidDto> updateBid(@RequestBody @Valid BidDto bidToUpdate) throws ResourceNotFoundException{
 		log.info("User has entered \"/bids\" endpoint to update a bid identified by " + bidToUpdate.getBidId() );
 		return ResponseEntity.ok(bidService.update(bidToUpdate));
 	}
 	
 	@DeleteMapping("")
-	public ResponseEntity<BidDto> deleteBid(@RequestBody @Valid BidDto bidToDelete){
+	public ResponseEntity<BidDto> deleteBid(@RequestBody @Valid BidDto bidToDelete) throws ResourceNotFoundException{
 		log.info("User has entered \"/bids\" endpoint to delete a bid identified by " + bidToDelete.getBidId());
 		return ResponseEntity.ok(bidService.delete(bidToDelete));
 	}

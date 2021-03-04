@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.UserDto;
+import com.poseidon.exception.DuplicateUserException;
+import com.poseidon.exception.UserNotFoundException;
 import com.poseidon.service.UserService;
 
 @RestController
@@ -36,25 +38,25 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<UserDto> getOneUser(@PathVariable Integer id){
+	public ResponseEntity<UserDto> getOneUser(@PathVariable Integer id) throws UserNotFoundException{
 		log.info("User has entered \"/users\" endpoint to get one user identified by " + id);
 		return ResponseEntity.ok(userService.read(id));
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<UserDto> addUser(@RequestBody @Valid UserDto userToAdd){
+	public ResponseEntity<UserDto> addUser(@RequestBody @Valid UserDto userToAdd) throws DuplicateUserException{
 		log.info("User has entered \"/users\" endpoint to add a user");
 		return ResponseEntity.ok(userService.create(userToAdd));
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserDto userToUpdate){
+	public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserDto userToUpdate) throws UserNotFoundException{
 		log.info("User has entered \"/users\" endpoint to update a user identified by " + userToUpdate.getUserId());
 		return ResponseEntity.ok(userService.update(userToUpdate));
 	}
 	
 	@DeleteMapping("")
-	public ResponseEntity<UserDto> deleteUser(@RequestBody @Valid UserDto userToDelete){
+	public ResponseEntity<UserDto> deleteUser(@RequestBody @Valid UserDto userToDelete) throws UserNotFoundException{
 		log.info("User has entered \"/users\" endpoint to delete a user identified by " + userToDelete.getUserId());
 		return ResponseEntity.ok(userService.delete(userToDelete));
 	}

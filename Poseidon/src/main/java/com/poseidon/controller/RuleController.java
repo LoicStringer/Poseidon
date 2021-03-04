@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.RuleDto;
+import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.RuleService;
 
 @RestController
@@ -36,7 +37,7 @@ public class RuleController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<RuleDto> getOneRule(@PathVariable Integer id){
+	public ResponseEntity<RuleDto> getOneRule(@PathVariable Integer id) throws ResourceNotFoundException{
 		log.info("User has entered \"/rules\" endpoint to get one rule identified by " + id);
 		return ResponseEntity.ok(ruleService.read(id));
 	}
@@ -48,13 +49,13 @@ public class RuleController {
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<RuleDto> updateRule(@RequestBody @Valid RuleDto ruleToUpdate){
+	public ResponseEntity<RuleDto> updateRule(@RequestBody @Valid RuleDto ruleToUpdate) throws ResourceNotFoundException{
 		log.info("User has entered \"/rules\" endpoint to update a rule identified by " + ruleToUpdate.getRuleId());
 		return ResponseEntity.ok(ruleService.update(ruleToUpdate));
 	}
 	
 	@DeleteMapping("")
-	public ResponseEntity<RuleDto> deleteRule(@RequestBody @Valid RuleDto ruleToDelete){
+	public ResponseEntity<RuleDto> deleteRule(@RequestBody @Valid RuleDto ruleToDelete) throws ResourceNotFoundException{
 		log.info("User has entered \"/rules\" endpoint to delete a rule identified by " + ruleToDelete.getRuleId());
 		return ResponseEntity.ok(ruleService.delete(ruleToDelete));
 	}

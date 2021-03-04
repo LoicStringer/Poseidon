@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.CurvePointDto;
+import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.CurvePointService;
 
 
@@ -38,7 +39,7 @@ public class CurvePointController {
 	}
 	
 	@GetMapping("/id}")
-	public ResponseEntity<CurvePointDto> getOneCurvePoint(@PathVariable Integer id){
+	public ResponseEntity<CurvePointDto> getOneCurvePoint(@PathVariable Integer id) throws ResourceNotFoundException{
 		log.info("User has entered \"/curvePoints\" endpoint to get one curve point identified by " + id);
 		return ResponseEntity.ok(curvePointService.read(id));
 	}
@@ -49,13 +50,13 @@ public class CurvePointController {
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<CurvePointDto> updateCurvePoint(@RequestBody @Valid CurvePointDto curvePointToUpdate){
+	public ResponseEntity<CurvePointDto> updateCurvePoint(@RequestBody @Valid CurvePointDto curvePointToUpdate) throws ResourceNotFoundException{
 		log.info("User has entered \"/curvePoints\" endpoint to update a curve point identified by " + curvePointToUpdate.getCurveId());
 		return ResponseEntity.ok(curvePointService.update(curvePointToUpdate));
 	}
 	
 	@DeleteMapping("")
-	public ResponseEntity<CurvePointDto> deleteCurvePoint(@RequestBody @Valid CurvePointDto curvePointToDelete){
+	public ResponseEntity<CurvePointDto> deleteCurvePoint(@RequestBody @Valid CurvePointDto curvePointToDelete) throws ResourceNotFoundException{
 		log.info("User has entered \"/curvePoints\" endpoint to delete a curve point identified by " + curvePointToDelete.getCurveId());
 		return ResponseEntity.ok(curvePointService.delete(curvePointToDelete));
 	}

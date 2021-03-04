@@ -11,8 +11,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 public class ExceptionsHandler extends ResponseEntityExceptionHandler{
 	
-	@ExceptionHandler(ItemNotFoundException.class)
-	public ResponseEntity<ExceptionResponse> handleItemNotFoundException(ItemNotFoundException ex){
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<ExceptionResponse> handleResourceNotFoundException(ResourceNotFoundException ex){
 		
 		ExceptionResponse exceptionResponse = exceptionResponseBuild(ex);
 		
@@ -21,6 +21,14 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(UserNotFoundException.class)
 	public ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException ex){
+		
+		ExceptionResponse exceptionResponse = exceptionResponseBuild(ex);
+		
+		return new ResponseEntity<ExceptionResponse>(exceptionResponse, getHttpStatusFromException(ex));
+	}
+	
+	@ExceptionHandler(DuplicateUserException.class)
+	public ResponseEntity<ExceptionResponse> handleDuplicateUserException(DuplicateUserException ex){
 		
 		ExceptionResponse exceptionResponse = exceptionResponseBuild(ex);
 		
