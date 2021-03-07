@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.poseidon.dto.UserDto;
 import com.poseidon.entity.User;
-import com.poseidon.exception.DuplicateUserException;
+import com.poseidon.exception.DuplicatedUserException;
 import com.poseidon.exception.UserNotFoundException;
 import com.poseidon.mapper.UserMapper;
 import com.poseidon.repository.UserRepository;
@@ -46,7 +46,7 @@ class UserServiceTest {
 	void isExpectedExceptionThrownWhenDuplicatingUserTest() {
 		User user = new User();
 		when(userRepository.findByUserName(any(String.class))).thenReturn(Optional.of(user));
-		assertThrows(DuplicateUserException.class, ()-> userService.create(testedUserDto));
+		assertThrows(DuplicatedUserException.class, ()-> userService.create(testedUserDto));
 	}
 
 	@Test

@@ -3,16 +3,16 @@ package com.poseidon.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.CONFLICT)
-public class DuplicateUserException extends Exception {
+@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+public class DuplicatedResourceException extends Exception{
 
 	private static final long serialVersionUID = 1L;
 
-	public DuplicateUserException(String message, Throwable cause) {
+	public DuplicatedResourceException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public DuplicateUserException(String message) {
+	public DuplicatedResourceException(String message) {
 		super(message);
 	}
 	

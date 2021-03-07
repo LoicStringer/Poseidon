@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.UserDto;
-import com.poseidon.exception.DuplicateUserException;
+import com.poseidon.exception.DuplicatedUserException;
 import com.poseidon.exception.UserNotFoundException;
 import com.poseidon.service.UserService;
 
@@ -44,7 +44,7 @@ public class UserController {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<UserDto> addUser(@RequestBody @Valid UserDto userToAdd) throws DuplicateUserException{
+	public ResponseEntity<UserDto> addUser(@RequestBody @Valid UserDto userToAdd) throws DuplicatedUserException{
 		log.info("User has entered \"/users\" endpoint to add a user");
 		return ResponseEntity.ok(userService.create(userToAdd));
 	}

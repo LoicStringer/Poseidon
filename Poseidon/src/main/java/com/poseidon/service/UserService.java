@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.poseidon.dto.UserDto;
 import com.poseidon.entity.User;
-import com.poseidon.exception.DuplicateUserException;
+import com.poseidon.exception.DuplicatedUserException;
 import com.poseidon.exception.UserNotFoundException;
 import com.poseidon.mapper.UserMapper;
 import com.poseidon.repository.UserRepository;
@@ -37,9 +37,9 @@ public class UserService {
 		return usersDto;
 	}
 	
-	public UserDto create(UserDto userToCreate) throws DuplicateUserException {
+	public UserDto create(UserDto userToCreate) throws DuplicatedUserException {
 		if(userRepository.findByUserName(userToCreate.getUserName()) != null)
-			throw new DuplicateUserException("A user with user name " + userToCreate.getUserName() + " is alreday registered");
+			throw new DuplicatedUserException("A user with user name " + userToCreate.getUserName() + " is alreday registered");
 		userToCreate.setUserPassword(bCryptPasswordEncoder.encode(userToCreate.getUserPassword()));
 		userRepository.save(userMapper.userDtoToUser(userToCreate));
 		return userToCreate ;

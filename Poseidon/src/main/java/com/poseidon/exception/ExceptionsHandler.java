@@ -27,8 +27,8 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler{
 		return new ResponseEntity<ExceptionResponse>(exceptionResponse, getHttpStatusFromException(ex));
 	}
 	
-	@ExceptionHandler(DuplicateUserException.class)
-	public ResponseEntity<ExceptionResponse> handleDuplicateUserException(DuplicateUserException ex){
+	@ExceptionHandler(DuplicatedUserException.class)
+	public ResponseEntity<ExceptionResponse> handleDuplicatedUserException(DuplicatedUserException ex){
 		
 		ExceptionResponse exceptionResponse = exceptionResponseBuild(ex);
 		
