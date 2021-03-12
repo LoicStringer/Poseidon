@@ -1,28 +1,32 @@
 package com.poseidon.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.poseidon.dao.CurvePointDao;
 import com.poseidon.dto.CurvePointDto;
+import com.poseidon.exception.DuplicatedResourceException;
 import com.poseidon.exception.ResourceNotFoundException;
-import com.poseidon.repository.CurvePointRepository;
 
+@DisplayName("CurvePointService CRUD operations tests")
 @ExtendWith(MockitoExtension.class)
 class CurvePointServiceTest {
 	
 	@Mock
-	private CurvePointRepository curvePointRepository;
-
+	private CurvePointDao curvePointDao;
+	
 	@InjectMocks
 	private CurvePointService curvePointService;
 
@@ -33,23 +37,76 @@ class CurvePointServiceTest {
 		testedCurvePointDto = new CurvePointDto();
 		testedCurvePointDto.setCurvePointId(1);
 	}
+	@Nested
+	@Tag("NominalCasesTests")
+	@DisplayName("Nominal cases checking")
+	class NominalCasesTests {
 
-	@Test
-	void isExpectedExceptionThrownWhenTryingToFindUnexistingCurvePointTest() {
-		when(curvePointRepository.findById(any(Integer.class))).thenReturn(Optional.empty());
-		assertThrows(ResourceNotFoundException.class, () -> curvePointService.read(1));
+		@Test
+		void createTest() throws DuplicatedResourceException {
+			when(curvePointDao.create(any(CurvePointDto.class))).thenReturn(testedCurvePointDto);
+			assertEquals(testedCurvePointDto, curvePointService.create(testedCurvePointDto));
+		}
+
+		@Test
+		void readTest() throws ResourceNotFoundException {
+			when(curvePointDao.read(any(Integer.class))).thenReturn(testedCurvePointDto);
+			assertEquals(testedCurvePointDto, curvePointService.read(1));
+		}
+
+		@Test
+		void updateTest() throws ResourceNotFoundException {
+			when(curvePointDao.update(any(Integer.class),any(CurvePointDto.class))).thenReturn(testedCurvePointDto);
+			assertEquals(testedCurvePointDto, curvePointService.update(1,testedCurvePointDto));
+		}
+
+		@Test
+		void deleteTest() throws ResourceNotFoundException {
+			when(curvePointDao.delete(any(Integer.class),any(CurvePointDto.class))).thenReturn(testedCurvePointDto);
+			assertEquals(testedCurvePointDto, curvePointService.delete(1,testedCurvePointDto));
+		}
+
 	}
 
-	@Test
-	void isExpectedExceptionThrownWhenDeletingUnexistingCurvePointTest() {
-		when(curvePointRepository.existsById(any(Integer.class))).thenReturn(false);
-		assertThrows(ResourceNotFoundException.class, () -> curvePointService.delete(testedCurvePointDto));
-	}
+	@Nested
+	@Tag("ExceptionsTests")
+	@DisplayName("Exceptions Checking")
+	class ExceptionsTests {
 
-	@Test
-	void isExpectedExceptionThrownWhenUpdatingUnexistingCurvePointTest() {
-		when(curvePointRepository.existsById(any(Integer.class))).thenReturn(false);
-		assertThrows(ResourceNotFoundException.class, () -> curvePointService.update(testedCurvePointDto));
-	}
+		@Test
+		void isExpectedExceptionThrownWhenCreatingAlreadyExistingCurvePointTest() throws DuplicatedResourceException {
+			when(curvePointDao.create(testedCurvePointDto)).thenThrow(DuplicatedResourceException.class);
+			assertThrows(DuplicatedResourceException.class, () -> curvePointService.create(testedCurvePointDto));
+		}
 
+		@Test
+		void isExpectedExceptionThrownWhenTryingToFindUnexistingCurvePointTest() throws ResourceNotFoundException {
+			when(curvePointDao.read(any(Integer.class))).thenThrow(ResourceNotFoundException.class);
+			assertThrows(ResourceNotFoundException.class, () -> curvePointService.read(1));
+		}
+
+		@Test
+		void isExpectedExceptionThrownWhenDeletingUnexistingCurvePointTest() throws ResourceNotFoundException {
+			when(curvePointDao.delete(any(Integer.class), any(CurvePointDto.class))).thenThrow(ResourceNotFoundException.class);
+			assertThrows(ResourceNotFoundException.class, () -> curvePointService.delete(1, testedCurvePointDto));
+		}
+
+		@Test
+		void isExpectedExceptionThrownWhenDeletingCurvePointWithIncoherentIdTest() throws ResourceNotFoundException {
+			when(curvePointDao.delete(any(Integer.class), any(CurvePointDto.class))).thenThrow(ResourceNotFoundException.class);
+			assertThrows(ResourceNotFoundException.class, () -> curvePointService.delete(2, testedCurvePointDto));
+		}
+
+		@Test
+		void isExpectedExceptionThrownWhenUpdatingUnexistingCurvePointTest() throws ResourceNotFoundException {
+			when(curvePointDao.update(any(Integer.class), any(CurvePointDto.class))).thenThrow(ResourceNotFoundException.class);
+			assertThrows(ResourceNotFoundException.class, () -> curvePointService.update(1, testedCurvePointDto));
+		}
+
+		@Test
+		void isExpectedExceptionThrownWhenUpdatingCurvePointWithIncoherentIdTest() throws ResourceNotFoundException {
+			when(curvePointDao.update(any(Integer.class), any(CurvePointDto.class))).thenThrow(ResourceNotFoundException.class);
+			assertThrows(ResourceNotFoundException.class, () -> curvePointService.update(2, testedCurvePointDto));
+		}
+	}
 }

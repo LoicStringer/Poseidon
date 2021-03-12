@@ -35,7 +35,7 @@ public class BidController {
 	@GetMapping("")
 	public ResponseEntity<List<BidDto>> getBidsList(){
 		log.info("User has entered \"/bids\" endpoint to get the bids list");
-		return ResponseEntity.ok(bidService.getAllBids());
+		return ResponseEntity.ok(bidService.getDtoList());
 	}
 	
 	@GetMapping("/{id}")

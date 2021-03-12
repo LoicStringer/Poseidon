@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.RatingDto;
+import com.poseidon.exception.DuplicatedResourceException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.RatingService;
 
@@ -33,7 +34,7 @@ public class RatingController {
 	@GetMapping("")
 	public ResponseEntity<List<RatingDto>> getRatingsList(){
 		log.info("User has entered \"/ratings\" endpoint to get the ratings list");
-		return ResponseEntity.ok(ratingService.getAllRatings());
+		return ResponseEntity.ok(ratingService.getDtoList());
 	}
 	
 	@GetMapping("/{id}")
@@ -43,21 +44,21 @@ public class RatingController {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<RatingDto> addRating(@RequestBody @Valid RatingDto ratingToAdd){
+	public ResponseEntity<RatingDto> addRating(@RequestBody @Valid RatingDto ratingToAdd) throws DuplicatedResourceException{
 		log.info("User has entered \"/ratings\" endpoint to add a rating");
 		return ResponseEntity.ok(ratingService.create(ratingToAdd));
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<RatingDto> updateRating(@RequestBody @Valid RatingDto ratingToUpdate) throws ResourceNotFoundException{
+	public ResponseEntity<RatingDto> updateRating(@PathVariable Integer id, @RequestBody @Valid RatingDto ratingToUpdate) throws ResourceNotFoundException{
 		log.info("User has entered \"/ratings\" endpoint to update a rating identified by " + ratingToUpdate.getRatingId());
-		return ResponseEntity.ok(ratingService.update(ratingToUpdate));
+		return ResponseEntity.ok(ratingService.update(id,ratingToUpdate));
 	}
 	
 	@DeleteMapping("")
-	public ResponseEntity<RatingDto> deleteRating(@RequestBody @Valid RatingDto ratingToDelete) throws ResourceNotFoundException{
+	public ResponseEntity<RatingDto> deleteRating(@PathVariable Integer id, @RequestBody @Valid RatingDto ratingToDelete) throws ResourceNotFoundException{
 		log.info("User has entered \"/ratings\" endpoint to delete a Rating identified by " + ratingToDelete.getRatingId());
-		return ResponseEntity.ok(ratingService.delete(ratingToDelete));
+		return ResponseEntity.ok(ratingService.delete(id,ratingToDelete));
 	}
 	
 	/*

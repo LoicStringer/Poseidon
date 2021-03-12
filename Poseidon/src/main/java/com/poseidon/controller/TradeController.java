@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.TradeDto;
+import com.poseidon.exception.DuplicatedResourceException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.TradeService;
 
@@ -33,7 +34,7 @@ public class TradeController {
 	@GetMapping("")
 	public ResponseEntity<List<TradeDto>> getTradesList(){
 		log.info("User has entered \"/trades\" endpoint to get the trades list");
-		return ResponseEntity.ok(tradeService.getAllTrades());
+		return ResponseEntity.ok(tradeService.getDtoList());
 	}
 	
 	@GetMapping("/{id}")
@@ -43,21 +44,21 @@ public class TradeController {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<TradeDto> addBid(@RequestBody @Valid TradeDto tradeToAdd){
+	public ResponseEntity<TradeDto> addBid(@RequestBody @Valid TradeDto tradeToAdd) throws DuplicatedResourceException{
 		log.info("User has entered \"/trades\" endpoint to add a trade");
 		return ResponseEntity.ok(tradeService.create(tradeToAdd));
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<TradeDto> updateTrade(@RequestBody @Valid TradeDto tradeToUpdate) throws ResourceNotFoundException{
+	public ResponseEntity<TradeDto> updateTrade(@PathVariable Integer id, @RequestBody @Valid TradeDto tradeToUpdate) throws ResourceNotFoundException{
 		log.info("User has entered \"/trades\" endpoint to update a trade identified by " + tradeToUpdate.getTradeId());
-		return ResponseEntity.ok(tradeService.update(tradeToUpdate));
+		return ResponseEntity.ok(tradeService.update(id,tradeToUpdate));
 	}
 	
 	@DeleteMapping("")
-	public ResponseEntity<TradeDto> deleteTrade(@RequestBody @Valid TradeDto tradeToDelete) throws ResourceNotFoundException{
+	public ResponseEntity<TradeDto> deleteTrade(@PathVariable Integer id, @RequestBody @Valid TradeDto tradeToDelete) throws ResourceNotFoundException{
 		log.info("User has entered \"/trades\" endpoint to delete a trade identified by " + tradeToDelete.getTradeId());
-		return ResponseEntity.ok(tradeService.delete(tradeToDelete));
+		return ResponseEntity.ok(tradeService.delete(id,tradeToDelete));
 	}
 	
 	/*

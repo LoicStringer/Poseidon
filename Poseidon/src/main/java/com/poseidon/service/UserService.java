@@ -1,25 +1,50 @@
 package com.poseidon.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.poseidon.dao.UserDao;
 import com.poseidon.dto.UserDto;
-import com.poseidon.entity.User;
 import com.poseidon.exception.DuplicatedUserException;
 import com.poseidon.exception.UserNotFoundException;
-import com.poseidon.mapper.UserMapper;
-import com.poseidon.repository.UserRepository;
 
 @Service
 @Transactional(rollbackOn = Exception.class)
-public class UserService {
+public class UserService implements IGenericService<UserDto,Integer>{
 	
+	@Autowired
+	private UserDao userDao;
+
+	@Override
+	public List<UserDto> getDtoList() {
+		return userDao.getAll();
+	}
+
+	@Override
+	public UserDto create(UserDto dtoToCreate) throws DuplicatedUserException {
+		return userDao.create(dtoToCreate);
+	}
+
+	@Override
+	public UserDto read(Integer dtoId) throws UserNotFoundException {
+		return userDao.read(dtoId);
+	}
+
+	@Override
+	public UserDto update(Integer dtoId, UserDto dtoToUpdate) throws UserNotFoundException {
+		return userDao.update(dtoId, dtoToUpdate);
+	}
+
+	@Override
+	public UserDto delete(Integer dtoId, UserDto dtoToDelete) throws UserNotFoundException {
+		return userDao.delete(dtoId, dtoToDelete);
+	}
+	
+	/*
 	@Autowired
 	private UserMapper userMapper ;
 
@@ -49,7 +74,7 @@ public class UserService {
 		return userMapper.userToUserDto(userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found")));
 	}
 	
-	public UserDto update(UserDto userToUpdate) throws UserNotFoundException {
+	public UserDto update(Integer resourceId, UserDto userToUpdate) throws UserNotFoundException {
 		if(!userRepository.existsById(userToUpdate.getUserId()))
 			throw new UserNotFoundException("User not found");
 		userToUpdate.setUserPassword(bCryptPasswordEncoder.encode(userToUpdate.getUserPassword()));
@@ -57,11 +82,11 @@ public class UserService {
 		return userToUpdate ;
 	}
 	
-	public UserDto delete(UserDto userToDelete) throws UserNotFoundException {
+	public UserDto delete(Integer resourceId, UserDto userToDelete) throws UserNotFoundException {
 		if(!userRepository.existsById(userToDelete.getUserId()))
 			throw new UserNotFoundException("User not found");
 		userRepository.delete(userMapper.userDtoToUser(userToDelete));
 		return userToDelete;
 	}
-	
+	*/
 }

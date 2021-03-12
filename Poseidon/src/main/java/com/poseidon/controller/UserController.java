@@ -34,7 +34,7 @@ public class UserController {
 	@GetMapping("")
 	public ResponseEntity<List<UserDto>> getUsersList(){
 		log.info("User has entered \"/users\" endpoint to get the users list");
-		return ResponseEntity.ok(userService.getAllUsers());
+		return ResponseEntity.ok(userService.getDtoList());
 	}
 	
 	@GetMapping("/{id}")
@@ -50,15 +50,15 @@ public class UserController {
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserDto userToUpdate) throws UserNotFoundException{
+	public ResponseEntity<UserDto> updateUser(@PathVariable Integer id, @RequestBody @Valid UserDto userToUpdate) throws UserNotFoundException{
 		log.info("User has entered \"/users\" endpoint to update a user identified by " + userToUpdate.getUserId());
-		return ResponseEntity.ok(userService.update(userToUpdate));
+		return ResponseEntity.ok(userService.update(id,userToUpdate));
 	}
 	
 	@DeleteMapping("")
-	public ResponseEntity<UserDto> deleteUser(@RequestBody @Valid UserDto userToDelete) throws UserNotFoundException{
+	public ResponseEntity<UserDto> deleteUser(@PathVariable Integer id, @RequestBody @Valid UserDto userToDelete) throws UserNotFoundException{
 		log.info("User has entered \"/users\" endpoint to delete a user identified by " + userToDelete.getUserId());
-		return ResponseEntity.ok(userService.delete(userToDelete));
+		return ResponseEntity.ok(userService.delete(id,userToDelete));
 	}
 	
 	/*

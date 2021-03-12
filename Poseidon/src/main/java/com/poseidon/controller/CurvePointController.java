@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.CurvePointDto;
+import com.poseidon.exception.DuplicatedResourceException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.CurvePointService;
 
@@ -35,7 +36,7 @@ public class CurvePointController {
 	@GetMapping("")
 	public ResponseEntity<List<CurvePointDto>> getCurvePointsList(){
 		log.info("User has entered \"/curvePoints\" endpoint to get the curve points list");
-		return ResponseEntity.ok(curvePointService.getAllCurvePoints());
+		return ResponseEntity.ok(curvePointService.getDtoList());
 	}
 	
 	@GetMapping("/id}")
@@ -44,21 +45,21 @@ public class CurvePointController {
 		return ResponseEntity.ok(curvePointService.read(id));
 	}
 	@PostMapping("")
-	public ResponseEntity<CurvePointDto> addCurvePoint(@RequestBody @Valid CurvePointDto curvePointToAdd){
+	public ResponseEntity<CurvePointDto> addCurvePoint(@RequestBody @Valid CurvePointDto curvePointToAdd) throws DuplicatedResourceException{
 		log.info("User has entered \"/curvePoints\" endpoint to add a curve point");
 		return ResponseEntity.ok(curvePointService.create(curvePointToAdd));
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<CurvePointDto> updateCurvePoint(@RequestBody @Valid CurvePointDto curvePointToUpdate) throws ResourceNotFoundException{
+	public ResponseEntity<CurvePointDto> updateCurvePoint(@PathVariable Integer id, @RequestBody @Valid CurvePointDto curvePointToUpdate) throws ResourceNotFoundException{
 		log.info("User has entered \"/curvePoints\" endpoint to update a curve point identified by " + curvePointToUpdate.getCurveId());
-		return ResponseEntity.ok(curvePointService.update(curvePointToUpdate));
+		return ResponseEntity.ok(curvePointService.update(id,curvePointToUpdate));
 	}
 	
 	@DeleteMapping("")
-	public ResponseEntity<CurvePointDto> deleteCurvePoint(@RequestBody @Valid CurvePointDto curvePointToDelete) throws ResourceNotFoundException{
+	public ResponseEntity<CurvePointDto> deleteCurvePoint(@PathVariable Integer id, @RequestBody @Valid CurvePointDto curvePointToDelete) throws ResourceNotFoundException{
 		log.info("User has entered \"/curvePoints\" endpoint to delete a curve point identified by " + curvePointToDelete.getCurveId());
-		return ResponseEntity.ok(curvePointService.delete(curvePointToDelete));
+		return ResponseEntity.ok(curvePointService.delete(id,curvePointToDelete));
 	}
 	
 	/*

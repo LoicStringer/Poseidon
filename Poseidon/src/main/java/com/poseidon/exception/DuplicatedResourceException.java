@@ -8,8 +8,8 @@ public class DuplicatedResourceException extends Exception{
 
 	private static final long serialVersionUID = 1L;
 
-	public DuplicatedResourceException(String message, Throwable cause) {
-		super(message, cause);
+	public DuplicatedResourceException() {
+		super();
 	}
 
 	public DuplicatedResourceException(String message) {

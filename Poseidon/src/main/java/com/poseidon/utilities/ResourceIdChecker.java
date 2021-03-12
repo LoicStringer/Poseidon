@@ -5,26 +5,32 @@ import org.springframework.stereotype.Component;
 
 import com.poseidon.exception.DuplicatedResourceException;
 import com.poseidon.exception.ResourceNotFoundException;
+import com.poseidon.repository.GenericRepository;
 
 @Component
-public class ResourceIdChecker<T,U>{
+public class ResourceIdChecker<E,ID> implements IGenericIdChecker<E, ID>{
 	
-	@Autowired
-	private GenericRepositoryImpl<T,U> checkerRepo;
+	@Autowired(required=false)
+	private GenericRepository<E,ID> resourceRepository;
 	
-	public void checkIfResourceExistsBeforeCreate(U id) throws DuplicatedResourceException {
-		if (checkerRepo.existsById(id))
+	public void checkIfResourceExistsBeforeCreate(ID id) throws DuplicatedResourceException {
+		if (resourceRepository.existsById(id))
 			throw new DuplicatedResourceException("Not allowed to set an id to resource.");
 	}
 	
-	public void checkIfResourceExistsBeforeTreatment(Class<T> objectType, U id, U comparedId) throws ResourceNotFoundException {
-		if(!checkerRepo.existsById(id) && id.equals(comparedId))
-			throw new ResourceNotFoundException(objectType.getSimpleName()+" not found");
+	public void checkIfResourceExistsBeforeRead(String objectType, ID id) throws ResourceNotFoundException {
+		if (!resourceRepository.existsById(id))
+			throw new ResourceNotFoundException(objectType+" not found");
 	}
 	
-	public void checkIdEqualityBeforeTreatment(Class<T> objectType, U id, U comparedId) throws ResourceNotFoundException {
-		if(checkerRepo.existsById(id) && !id.equals(comparedId))
-			throw new ResourceNotFoundException("Id request is different from "+objectType.getSimpleName()+ " resource id to treat.");
+	public void checkIfResourceExistsBeforeUpdateOrDelete(String objectType, ID id, ID comparedId) throws ResourceNotFoundException {
+		if(!resourceRepository.existsById(id) && id.equals(comparedId))
+			throw new ResourceNotFoundException(objectType+" not found");
+	}
+	
+	public void checkIdCoherenceBeforeUpdateOrDelete(String objectType, ID id, ID comparedId) throws ResourceNotFoundException {
+		if(resourceRepository.existsById(id) && !id.equals(comparedId))
+			throw new ResourceNotFoundException("Id request is different from "+objectType+ " resource id to treat.");
 	}
 	
 	

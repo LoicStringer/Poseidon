@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.RuleDto;
+import com.poseidon.exception.DuplicatedResourceException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.RuleService;
 
@@ -33,7 +34,7 @@ public class RuleController {
 	@GetMapping("")
 	public ResponseEntity<List<RuleDto>> getRulesList(){
 		log.info("User has entered \"/rules\" endpoint to get the rules list");
-		return ResponseEntity.ok(ruleService.getAllRules());
+		return ResponseEntity.ok(ruleService.getDtoList());
 	}
 	
 	@GetMapping("/{id}")
@@ -43,21 +44,21 @@ public class RuleController {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<RuleDto> addRule(@RequestBody @Valid RuleDto ruleToAdd){
+	public ResponseEntity<RuleDto> addRule(@RequestBody @Valid RuleDto ruleToAdd) throws DuplicatedResourceException{
 		log.info("User has entered \"/rules\" endpoint to add a rule");
 		return ResponseEntity.ok(ruleService.create(ruleToAdd));
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<RuleDto> updateRule(@RequestBody @Valid RuleDto ruleToUpdate) throws ResourceNotFoundException{
+	public ResponseEntity<RuleDto> updateRule(@PathVariable Integer id, @RequestBody @Valid RuleDto ruleToUpdate) throws ResourceNotFoundException{
 		log.info("User has entered \"/rules\" endpoint to update a rule identified by " + ruleToUpdate.getRuleId());
-		return ResponseEntity.ok(ruleService.update(ruleToUpdate));
+		return ResponseEntity.ok(ruleService.update(id,ruleToUpdate));
 	}
 	
 	@DeleteMapping("")
-	public ResponseEntity<RuleDto> deleteRule(@RequestBody @Valid RuleDto ruleToDelete) throws ResourceNotFoundException{
+	public ResponseEntity<RuleDto> deleteRule(@PathVariable Integer id,@RequestBody @Valid RuleDto ruleToDelete) throws ResourceNotFoundException{
 		log.info("User has entered \"/rules\" endpoint to delete a rule identified by " + ruleToDelete.getRuleId());
-		return ResponseEntity.ok(ruleService.delete(ruleToDelete));
+		return ResponseEntity.ok(ruleService.delete(id,ruleToDelete));
 	}
 	
 	/*
