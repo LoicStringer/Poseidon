@@ -3,15 +3,14 @@ package com.poseidon.dao;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import com.poseidon.repository.GenericRepository;
 
 @Repository
 public abstract class GenericDao<E,ID> {
 
 	@Autowired(required = false)
-	private GenericRepository<E, ID> genericRepository;
+	private JpaRepository<E, ID> genericRepository;
 	
 	public List<E> getAllEntity(){
 		return genericRepository.findAll();

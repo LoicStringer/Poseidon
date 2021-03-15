@@ -9,16 +9,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.poseidon.exception.DuplicatedResourceException;
 import com.poseidon.exception.ResourceNotFoundException;
-import com.poseidon.repository.GenericRepository;
 
 @ExtendWith(MockitoExtension.class)
 class ResourceIdCheckerTest {
 
 	@Mock
-	private GenericRepository<Object,Object> repo;
+	private JpaRepository<Object,Object> repo;
 	
 	@InjectMocks
 	private ResourceIdChecker<Object,Object> checker;

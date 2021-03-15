@@ -25,7 +25,7 @@ import com.poseidon.service.CurvePointService;
 
 
 @RestController
-@RequestMapping("/curvePoints")
+@RequestMapping("/poseidon/api/curvePoints")
 public class CurvePointController {
     
 	private Logger log = LoggerFactory.getLogger(this.getClass());

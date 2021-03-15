@@ -23,7 +23,7 @@ import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.TradeService;
 
 @RestController
-@RequestMapping("/trades")
+@RequestMapping("/poseidon/api/trades")
 public class TradeController {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());

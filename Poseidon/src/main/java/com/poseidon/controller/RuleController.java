@@ -23,7 +23,7 @@ import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.RuleService;
 
 @RestController
-@RequestMapping("/rules")
+@RequestMapping("/poseidon/api/rules")
 public class RuleController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());

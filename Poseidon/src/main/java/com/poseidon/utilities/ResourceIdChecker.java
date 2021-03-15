@@ -1,17 +1,17 @@
 package com.poseidon.utilities;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 import com.poseidon.exception.DuplicatedResourceException;
 import com.poseidon.exception.ResourceNotFoundException;
-import com.poseidon.repository.GenericRepository;
 
 @Component
 public class ResourceIdChecker<E,ID> implements IGenericIdChecker<E, ID>{
 	
 	@Autowired(required=false)
-	private GenericRepository<E,ID> resourceRepository;
+	private JpaRepository<E,ID> resourceRepository;
 	
 	public void checkIfResourceExistsBeforeCreate(ID id) throws DuplicatedResourceException {
 		if (resourceRepository.existsById(id))

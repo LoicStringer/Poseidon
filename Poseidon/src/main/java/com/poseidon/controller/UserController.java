@@ -23,7 +23,7 @@ import com.poseidon.exception.UserNotFoundException;
 import com.poseidon.service.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/poseidon/users")
 public class UserController {
     
 	private Logger log = LoggerFactory.getLogger(this.getClass());

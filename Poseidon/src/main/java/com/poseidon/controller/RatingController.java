@@ -23,7 +23,7 @@ import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.RatingService;
 
 @RestController
-@RequestMapping("/ratings")
+@RequestMapping("/poseidon/api/ratings")
 public class RatingController {
     
 	private Logger log = LoggerFactory.getLogger(this.getClass());

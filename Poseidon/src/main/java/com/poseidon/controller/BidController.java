@@ -24,7 +24,7 @@ import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.BidService;
 
 @RestController
-@RequestMapping("/bids")
+@RequestMapping("/poseidon/api/bids")
 public class BidController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
