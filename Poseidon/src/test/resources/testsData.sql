@@ -1,4 +1,4 @@
-INSERT INTO user (user_id, user_fullname, user_name, user_password, user_role) VALUES (1, "TonyMonatana", "Tony", "$2y$10$mp0UK/hRFQ57hBluSGY5ou9jC1xG66XnpgbLHVtFrc5J7IGxF/uz6", "ADMIN");
+INSERT INTO user (user_id, user_fullname, user_name, user_password, user_role) VALUES (1, "TonyMontana", "Tony", "$2y$10$mp0UK/hRFQ57hBluSGY5ou9jC1xG66XnpgbLHVtFrc5J7IGxF/uz6", "ADMIN");
 INSERT INTO user (user_id, user_fullname, user_name, user_password, user_role) VALUES (2, "FranckSerpico", "Franck", "$2y$10$dJVisOd9SG5YFucSVbgPF.9Lm1QoJS4Saie0faM/RXjZT0kdDqmy6", "USER");
 
 INSERT INTO bid (bid_id, account, type, bid_quantity) VALUES (1, "GamblingAccount", "Gambling", 500.00);

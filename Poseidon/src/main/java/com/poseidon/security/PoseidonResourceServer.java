@@ -30,7 +30,7 @@ public class PoseidonResourceServer extends ResourceServerConfigurerAdapter {
         	.and()
             .authorizeRequests()
             	.antMatchers("/poseidon/users/**","/poseidon/admin/**","poseidon/api/**").authenticated()
-                .antMatchers("/poseidon/users/**").hasAnyAuthority("USER","ADMIN")
+                .antMatchers("/poseidon/users/**").hasAuthority("ADMIN")
                 .antMatchers("/poseidon/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/poseidon/api/**").hasAnyAuthority("USER","ADMIN")
                 .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());

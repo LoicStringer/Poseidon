@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Repository;
 
 import com.poseidon.dto.BidDto;
@@ -12,23 +12,20 @@ import com.poseidon.entity.Bid;
 import com.poseidon.exception.DuplicatedResourceException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.mapper.BidMapper;
-import com.poseidon.utilities.ResourceIdChecker;
+import com.poseidon.repository.BidRepository;
 
 @Repository
-public class BidDao extends GenericDao<Bid,Integer> implements IGenericDao<BidDto,Integer>{
+public class BidDao implements IGenericCrudDao<BidDto,Integer>  {
 
-	@Autowired
-	private ResourceIdChecker<Bid,Integer> resourceIdChecker;
-	
 	@Autowired
 	private BidMapper bidMapper;
 	
-	@Value("Bid")
-	private String resourceName;
-
+	@Autowired
+	private BidRepository bidRepository;
+	
 	@Override
-	public List<BidDto> getAll() {
-		List<Bid> bidEntitiesList = getAllEntity();
+	public List<BidDto> getAllList() {
+		List<Bid> bidEntitiesList = bidRepository.findAll();
 		List<BidDto> bidDtosList = bidEntitiesList.stream()
 				.map(b->bidMapper.bidToBidDto(b))
 				.collect(Collectors.toList());
@@ -36,34 +33,46 @@ public class BidDao extends GenericDao<Bid,Integer> implements IGenericDao<BidDt
 	}
 
 	@Override
-	public BidDto create(BidDto entityToCreateAsDto) throws DuplicatedResourceException {
-		resourceIdChecker.checkIfResourceExistsBeforeCreate(entityToCreateAsDto.getBidId());
-		createEntity(bidMapper.bidDtoToBid(entityToCreateAsDto));
-		return entityToCreateAsDto;
+	public BidDto create(BidDto bidToCreate) throws DuplicatedResourceException  {
+		preventResourceIdBreach(bidToCreate.getBidId());
+		bidRepository.save(bidMapper.bidDtoToBid(bidToCreate));
+		return bidToCreate;
 	}
 
 	@Override
-	public BidDto read(Integer entityId) throws ResourceNotFoundException {
-		resourceIdChecker.checkIfResourceExistsBeforeRead(resourceName, entityId);
-		return bidMapper.bidToBidDto(readEntity(entityId));
+	public BidDto read(Integer bidId) throws ResourceNotFoundException {
+		Bid bidToRead = bidRepository.findById(bidId).orElseThrow(()->new ResourceNotFoundException("Bid with id "+bidId+ " not found"));
+		return bidMapper.bidToBidDto(bidToRead);
 	}
 
 	@Override
-	public BidDto update(Integer entityId, BidDto entityToUpdateAsDto) throws ResourceNotFoundException {
-		resourceIdChecker.checkIdCoherenceBeforeUpdateOrDelete(resourceName, entityId, entityToUpdateAsDto.getBidId());
-		resourceIdChecker.checkIfResourceExistsBeforeUpdateOrDelete(resourceName, entityId,  entityToUpdateAsDto.getBidId());
-		updateEntity(entityId, bidMapper.bidDtoToBid(entityToUpdateAsDto));
-		return entityToUpdateAsDto;
+	public BidDto update(Integer bidId, BidDto updatedBid) throws ResourceNotFoundException  {
+		checkResourceExistence(bidId);
+		checkResourceIdCoherence(bidId, updatedBid.getBidId());
+		bidRepository.save(bidMapper.bidDtoToBid(updatedBid));
+		return updatedBid;
 	}
 
 	@Override
-	public BidDto delete(Integer entityId, BidDto entityToDeleteAsDto) throws ResourceNotFoundException {
-		resourceIdChecker.checkIdCoherenceBeforeUpdateOrDelete(resourceName, entityId, entityToDeleteAsDto.getBidId());
-		resourceIdChecker.checkIfResourceExistsBeforeUpdateOrDelete(resourceName, entityId,  entityToDeleteAsDto.getBidId());
-		deleteEntity(entityId, bidMapper.bidDtoToBid(entityToDeleteAsDto));
-		return entityToDeleteAsDto;
+	public BidDto delete(Integer bidId, BidDto bidToDelete) throws ResourceNotFoundException {
+		checkResourceExistence(bidId);
+		checkResourceIdCoherence(bidId, bidToDelete.getBidId());
+		bidRepository.deleteById(bidId);
+		return bidToDelete;
 	}
-
 	
+	private void preventResourceIdBreach(Integer bidId) throws DuplicatedResourceException {
+		if(bidRepository.existsById(bidId))
+			throw new DuplicatedResourceException("Not allowed to set an id to resources.");
+	}
+
+	private void checkResourceExistence(Integer bidId) throws ResourceNotFoundException {
+		if(!bidRepository.existsById(bidId))
+			throw new ResourceNotFoundException("The bid with "+bidId+ " id number is not registered.");
+	}
 	
+	private void checkResourceIdCoherence(Integer targetBidId, Integer treatedBidId) throws ResourceNotFoundException {
+		if(!targetBidId.equals(treatedBidId))
+			throw new ResourceNotFoundException("The requested bid's id "+targetBidId+ " is different from the currently handled bid's id.");
+	}
 }

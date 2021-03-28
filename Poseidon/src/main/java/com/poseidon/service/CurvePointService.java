@@ -21,7 +21,7 @@ public class CurvePointService implements IGenericService<CurvePointDto, Integer
 
 	@Override
 	public List<CurvePointDto> getDtoList() {
-		return curvePointDao.getAll();
+		return curvePointDao.getAllList();
 	}
 
 	@Override
@@ -44,52 +44,4 @@ public class CurvePointService implements IGenericService<CurvePointDto, Integer
 		return curvePointDao.delete(dtoId, dtoToDelete);
 	}
 
-	
-	
-	/*
-	@Autowired
-	private CurvePointMapper curvePointMapper;
-	
-	@Autowired
-	private CurvePointRepository curvePointRepository;
-	
-	@Autowired
-	private ResourceIdChecker<CurvePoint, Integer> resourceIdChecker ;
-	
-	
-	public List<CurvePointDto> getAllCurvePoints(){
-		List<CurvePoint> curvePoints = curvePointRepository.findAll();
-		List<CurvePointDto> curvePointsDto = curvePoints.stream()
-				.map(cp->curvePointMapper.curvePointToCurvePointDto(cp))
-				.collect(Collectors.toList());
-		return curvePointsDto;
-	}
-	
-	public CurvePointDto create(CurvePointDto curvePointToCreate) throws DuplicatedResourceException {
-		resourceIdChecker.checkIfResourceExistsBeforeCreate(curvePointToCreate.getCurvePointId());
-		curvePointRepository.save(curvePointMapper.curvePointDtoToCurvePoint(curvePointToCreate));
-		return curvePointToCreate;
-	}
-	
-	public CurvePointDto read(Integer id) throws ResourceNotFoundException {
-		resourceIdChecker.checkIfResourceExistsBeforeRead(CurvePoint.class, id);
-		return curvePointMapper.curvePointToCurvePointDto(curvePointRepository.findById(id).get());
-	}
-	
-	public CurvePointDto update (Integer resourceId, CurvePointDto curvePointToUpdate) throws ResourceNotFoundException {
-		Integer curvePointToUpdateId = curvePointToUpdate.getCurvePointId();
-		resourceIdChecker.checkIfResourceExistsBeforeUpdateOrDelete(CurvePoint.class, resourceId, curvePointToUpdateId);
-		resourceIdChecker.checkIdCoherenceBeforeUpdateOrDelete(CurvePoint.class, resourceId, curvePointToUpdateId);
-		curvePointRepository.save(curvePointMapper.curvePointDtoToCurvePoint(curvePointToUpdate));
-		return curvePointToUpdate;
-	}
-	
-	public CurvePointDto  delete(Integer resourceId, CurvePointDto curvePointToDelete) throws ResourceNotFoundException {
-		Integer curvePointToDeleteId = curvePointToDelete.getCurvePointId();
-		resourceIdChecker.checkIfResourceExistsBeforeUpdateOrDelete(CurvePoint.class, resourceId, curvePointToDeleteId);
-		resourceIdChecker.checkIdCoherenceBeforeUpdateOrDelete(CurvePoint.class, resourceId, curvePointToDeleteId);
-		curvePointRepository.delete(curvePointMapper.curvePointDtoToCurvePoint(curvePointToDelete));
-		return curvePointToDelete;
-	}
-	*/
 }

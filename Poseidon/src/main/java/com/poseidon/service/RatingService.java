@@ -21,7 +21,7 @@ public class RatingService implements IGenericService<RatingDto,Integer> {
 
 	@Override
 	public List<RatingDto> getDtoList() {
-		return ratingDao.getAll();
+		return ratingDao.getAllList();
 	}
 
 	@Override
@@ -44,50 +44,4 @@ public class RatingService implements IGenericService<RatingDto,Integer> {
 		return ratingDao.delete(dtoId, dtoToDelete);
 	}
 
-	
-	/*
-	@Autowired
-	private RatingMapper ratingMapper ;
-	
-	@Autowired
-	private RatingRepository ratingRepository;
-
-	@Autowired
-	private ResourceIdChecker<Rating, Integer> resourceIdChecker ;
-	
-	public List<RatingDto> getAllRatings(){
-		List<Rating> ratings = ratingRepository.findAll(); 
-		List<RatingDto> ratingsDto = ratings.stream()
-				.map(r-> ratingMapper.ratingToRatingDto(r))
-				.collect(Collectors.toList());
-		return ratingsDto;
-	}
-	
-	public RatingDto create(RatingDto ratingToCreate) throws DuplicatedResourceException {
-		resourceIdChecker.checkIfResourceExistsBeforeCreate(ratingToCreate.getRatingId());
-		ratingRepository.save(ratingMapper.ratingDtoToRating(ratingToCreate));
-		return ratingToCreate;
-	}
-	
-	public RatingDto read(Integer id) throws ResourceNotFoundException {
-		resourceIdChecker.checkIfResourceExistsBeforeRead(Rating.class, id);
-		return ratingMapper.ratingToRatingDto(ratingRepository.findById(id).get());
-	}
-	
-	public RatingDto update (Integer resourceId, RatingDto ratingToUpdate) throws ResourceNotFoundException {
-		Integer ratingToUpdateId = ratingToUpdate.getRatingId();
-		resourceIdChecker.checkIfResourceExistsBeforeUpdateOrDelete(Rating.class, resourceId, ratingToUpdateId);
-		resourceIdChecker.checkIdCoherenceBeforeUpdateOrDelete(Rating.class, resourceId, ratingToUpdateId);
-		ratingRepository.save(ratingMapper.ratingDtoToRating(ratingToUpdate));
-		return ratingToUpdate;
-	}
-	
-	public RatingDto delete(Integer resourceId, RatingDto ratingToDelete) throws ResourceNotFoundException {
-		Integer ratingToDeleteId = ratingToDelete.getRatingId();
-		resourceIdChecker.checkIfResourceExistsBeforeUpdateOrDelete(Rating.class, resourceId, ratingToDeleteId);
-		resourceIdChecker.checkIdCoherenceBeforeUpdateOrDelete(Rating.class, resourceId, ratingToDeleteId);
-		ratingRepository.delete(ratingMapper.ratingDtoToRating(ratingToDelete));
-		return ratingToDelete;
-	}
-	*/
 }

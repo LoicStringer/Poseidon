@@ -21,7 +21,7 @@ public class BidService implements IGenericService<BidDto,Integer>{
 
 	@Override
 	public List<BidDto> getDtoList() {
-		return bidDao.getAll();
+		return bidDao.getAllList();
 	}
 
 	@Override
@@ -43,66 +43,5 @@ public class BidService implements IGenericService<BidDto,Integer>{
 	public BidDto delete(Integer dtoId, BidDto dtoToDelete) throws ResourceNotFoundException {
 		return bidDao.delete(dtoId, dtoToDelete);
 	}
-
-/*
-	@Autowired
-	private BidMapper bidMapper; 
-	
-	@Autowired
-	private BidDao bidRepository;
-	
-	@Autowired
-	private ResourceIdChecker<Bid, Integer> resourceIdChecker ;
-	
-	public List<BidDto> getAllBids(){
-		
-		List<Bid> bidsList = bidRepository.findAll();
-		List<BidDto> bidsDto = bidsList.stream()
-				.map(b-> bidMapper.bidToBidDto(b))
-				.collect(Collectors.toList());
-		
-		return bidRepository.getBidsList();
-	}
-	
-	public BidDto createBid (BidDto bidToCreate) throws DuplicatedResourceException {
-		
-		resourceIdChecker.checkIfResourceExistsBeforeCreate(bidToCreate.getBidId());
-		
-		bidRepository.save(bidMapper.bidDtoToBid(bidToCreate));
-		return bidToCreate;
-		
-		return bidRepository.createBid(bidToCreate);
-	}
-	
-	public BidDto read(Integer id) throws ResourceNotFoundException {
-		
-		resourceIdChecker.checkIfResourceExistsBeforeRead("Bid", id);
-		return bidMapper.bidToBidDto(bidRepository.findById(id).get());
-		
-		return bidRepository.readBid(id);
-	}
-	
-	public BidDto update(Integer resourceId, BidDto bidToUpdate) throws ResourceNotFoundException {
-		/*
-		Integer bidToUpdateId = bidToUpdate.getBidId();
-		resourceIdChecker.checkIfResourceExistsBeforeUpdateOrDelete("Bid", resourceId, bidToUpdateId);
-		resourceIdChecker.checkIdCoherenceBeforeUpdateOrDelete("Bid", resourceId, bidToUpdateId);
-		bidRepository.save(bidMapper.bidDtoToBid(bidToUpdate));
-		return bidToUpdate;
-		
-		return bidRepository.updateBid(resourceId, bidToUpdate);
-	}
-		
-	public BidDto delete(Integer resourceId, BidDto bidToDelete) throws ResourceNotFoundException {
-		
-		Integer bidToDeleteId = bidToDelete.getBidId();
-		resourceIdChecker.checkIfResourceExistsBeforeUpdateOrDelete("Bid", resourceId, bidToDeleteId);
-		resourceIdChecker.checkIdCoherenceBeforeUpdateOrDelete("Bid", resourceId, bidToDeleteId);
-		bidRepository.delete(bidMapper.bidDtoToBid(bidToDelete));
-		return bidToDelete;
-		
-		return bidRepository.deleteBid(resourceId, bidToDelete);
-	}
-*/
 
 }

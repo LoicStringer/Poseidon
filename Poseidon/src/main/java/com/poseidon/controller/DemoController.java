@@ -1,13 +1,10 @@
 package com.poseidon.controller;
 
-import javax.annotation.security.RolesAllowed;
-
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HomeController{
+public class DemoController{
 	
 	@RequestMapping("/poseidon")
 	public String getHome() {
@@ -21,13 +18,19 @@ public class HomeController{
 	
 	@RequestMapping("/poseidon/users")
 	public String greetUser() {
-		return "Welcome, user";
+		return "Welcome, admin in users management";
 	}
 	
-	@RequestMapping("poseidon/login")
-	public String login() {
+	@RequestMapping("/poseidon/login")
+	public String accessLogin() {
 		return "Login page";
 	}
+	
+	@RequestMapping("/poseidon/api")
+	public String accessApiResources() {
+		return "Welcome to Poseidon resources api.";
+	}
+	
 	
 	/*
 	@RequestMapping("/")

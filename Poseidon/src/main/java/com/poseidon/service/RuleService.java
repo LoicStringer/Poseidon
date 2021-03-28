@@ -21,7 +21,7 @@ public class RuleService implements IGenericService<RuleDto,Integer>{
 	
 	@Override
 	public List<RuleDto> getDtoList() {
-		return ruleDao.getAll();
+		return ruleDao.getAllList();
 	}
 
 	@Override
@@ -44,51 +44,4 @@ public class RuleService implements IGenericService<RuleDto,Integer>{
 		return ruleDao.delete(dtoId, dtoToDelete);
 	}
 
-	/*
-	@Autowired
-	private RuleMapper ruleMapper ;
-	
-	@Autowired
-	private RuleRepository ruleRepository;
-	
-	@Autowired
-	private ResourceIdChecker<Rule, Integer> resourceIdChecker ;
-	
-	
-	public List<RuleDto> getAllRules(){
-		List<Rule> rules = ruleRepository.findAll();
-		List<RuleDto> rulesDto = rules.stream()
-				.map(r-> ruleMapper.ruleToRuleDto(r))
-				.collect(Collectors.toList());
-		return rulesDto ;
-	}
-	
-	public RuleDto create(RuleDto ruleToCreate) throws DuplicatedResourceException {
-		resourceIdChecker.checkIfResourceExistsBeforeCreate(ruleToCreate.getRuleId());
-		ruleRepository.save(ruleMapper.ruleDtoToRule(ruleToCreate));
-		return ruleToCreate ;
-	}
-	
-	public RuleDto read(Integer id) throws ResourceNotFoundException {
-		resourceIdChecker.checkIfResourceExistsBeforeRead(Rule.class, id);
-		return ruleMapper.ruleToRuleDto(ruleRepository.findById(id).get());
-	}
-	
-	public RuleDto update (Integer resourceId,RuleDto ruleToUpdate) throws ResourceNotFoundException {
-		Integer ruleToUpdateId = ruleToUpdate.getRuleId();
-		resourceIdChecker.checkIfResourceExistsBeforeUpdateOrDelete(Rule.class, resourceId, ruleToUpdateId);
-		resourceIdChecker.checkIdCoherenceBeforeUpdateOrDelete(Rule.class, resourceId, ruleToUpdateId);
-		ruleRepository.save(ruleMapper.ruleDtoToRule(ruleToUpdate));
-		return ruleToUpdate ;
-	}
-	
-	public RuleDto  delete(Integer resourceId, RuleDto ruleToDelete) throws ResourceNotFoundException {
-		Integer ruleToDeleteId = ruleToDelete.getRuleId();
-		resourceIdChecker.checkIfResourceExistsBeforeUpdateOrDelete(Rule.class, resourceId, ruleToDeleteId);
-		resourceIdChecker.checkIdCoherenceBeforeUpdateOrDelete(Rule.class, resourceId, ruleToDeleteId);
-		ruleRepository.delete(ruleMapper.ruleDtoToRule(ruleToDelete));
-		return ruleToDelete;
-	}
-	*/
-	
 }

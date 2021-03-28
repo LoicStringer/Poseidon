@@ -21,7 +21,7 @@ public class TradeService implements IGenericService<TradeDto,Integer>{
 	
 	@Override
 	public List<TradeDto> getDtoList() {
-		return tradeDao.getAll();
+		return tradeDao.getAllList();
 	}
 
 	@Override
@@ -44,50 +44,4 @@ public class TradeService implements IGenericService<TradeDto,Integer>{
 		return tradeDao.delete(dtoId, dtoToDelete);
 	}
 
-	/*
-	@Autowired
-	private TradeMapper tradeMapper ;
-	
-	@Autowired
-	private TradeRepository tradeRepository;
-	
-	@Autowired
-	private ResourceIdChecker<Trade, Integer> resourceIdChecker ;
-	
-	public List<TradeDto> getAllTrades(){
-		List<Trade> trades = tradeRepository.findAll();
-		List<TradeDto> tradesDto = trades.stream()
-				.map(t->tradeMapper.tradeToTradeDto(t))
-				.collect(Collectors.toList());
-		return tradesDto;
-	}
-	
-	public TradeDto create(TradeDto tradeToCreate) throws DuplicatedResourceException {
-		resourceIdChecker.checkIfResourceExistsBeforeCreate(tradeToCreate.getTradeId());
-		tradeRepository.save(tradeMapper.tradeDtoToTrade(tradeToCreate));
-		return tradeToCreate;
-	}
-	
-	public TradeDto read(Integer id) throws ResourceNotFoundException {
-		resourceIdChecker.checkIfResourceExistsBeforeRead(Trade.class, id);
-		return tradeMapper.tradeToTradeDto(tradeRepository.findById(id).get());
-	}
-	
-	public TradeDto update(Integer resourceId,TradeDto tradeToUpdate) throws ResourceNotFoundException {
-		Integer tradeToUpdateId = tradeToUpdate.getTradeId();
-		resourceIdChecker.checkIfResourceExistsBeforeUpdateOrDelete(Trade.class, resourceId, tradeToUpdateId);
-		resourceIdChecker.checkIdCoherenceBeforeUpdateOrDelete(Trade.class, resourceId, tradeToUpdateId);
-		tradeRepository.save(tradeMapper.tradeDtoToTrade(tradeToUpdate));
-		return tradeToUpdate;
-	}
-	
-	public TradeDto delete(Integer resourceId, TradeDto tradeToDelete) throws ResourceNotFoundException {
-		Integer tradeToDeleteId = tradeToDelete.getTradeId();
-		resourceIdChecker.checkIfResourceExistsBeforeUpdateOrDelete(Trade.class, resourceId, tradeToDeleteId);
-		resourceIdChecker.checkIdCoherenceBeforeUpdateOrDelete(Trade.class, resourceId, tradeToDeleteId);
-		tradeRepository.delete(tradeMapper.tradeDtoToTrade(tradeToDelete));
-		return tradeToDelete;
-	}
-	*/
-	
 }
