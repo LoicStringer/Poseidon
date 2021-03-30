@@ -2,19 +2,29 @@ package com.poseidon.dto;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.DecimalMin;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class TradeDto {
 	
-
 	private Integer tradeId;
 	private String account;
 	private String type;
+	
+	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double buyQuantity;
+	
+	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double sellQuantity;
+	
+	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double buyPrice;
+	
+	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double sellPrice;
+	
 	private Timestamp tradeDate;
 	private String security;
 	private String status;

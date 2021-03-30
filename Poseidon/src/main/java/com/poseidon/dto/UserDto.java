@@ -1,6 +1,7 @@
 package com.poseidon.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.stereotype.Component;
 
@@ -12,8 +13,8 @@ public class UserDto {
 	@NotBlank(message = "Username is mandatory")
     private String userName;
     
-	//@Pattern(regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\\]).{8,32}$",
-    //message = "Password must contains at least 8 characters, an upper-case letter, a digit and a symbol.")
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\\]).{8,32}$",
+    message = "Password must contains at least 8 characters, an upper-case letter, a digit and a symbol.")
     @NotBlank(message = "Password is mandatory")
     private String userPassword;
 

@@ -26,7 +26,6 @@ public class Rating {
 	@Column(name="fitch_rating",length = 125)
 	private String fitchRating;
 	
-	@Positive
 	@Column(name="order_number")
 	private Integer orderNumber;
 

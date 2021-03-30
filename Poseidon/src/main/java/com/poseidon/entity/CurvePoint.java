@@ -22,19 +22,15 @@ public class CurvePoint {
 	@Column(name="curve_point_id", length = 4)
 	private Integer curvePointId;
 	
-	@Positive
-	@NotBlank(message="Must not be null")
 	@Column(name="curve_Id")
 	private Integer curveId;
 	
 	@Column(name="as_of_date")
 	private Timestamp asOfDate;
 	
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	@Column(name="term")
 	private Double term;
-	
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
+
 	@Column(name="value")
 	private Double value;
 	

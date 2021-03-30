@@ -41,7 +41,7 @@ public class BidDao implements IGenericCrudDao<BidDto,Integer>  {
 
 	@Override
 	public BidDto read(Integer bidId) throws ResourceNotFoundException {
-		Bid bidToRead = bidRepository.findById(bidId).orElseThrow(()->new ResourceNotFoundException("Bid with id "+bidId+ " not found"));
+		Bid bidToRead = bidRepository.findById(bidId).orElseThrow(()-> new ResourceNotFoundException("Bid with id "+bidId+ " not found"));
 		return bidMapper.bidToBidDto(bidToRead);
 	}
 

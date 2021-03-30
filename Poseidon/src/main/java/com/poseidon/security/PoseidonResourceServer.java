@@ -17,9 +17,12 @@ public class PoseidonResourceServer extends ResourceServerConfigurerAdapter {
 	@Value("${resource.id}")
 	private String resourceId;
 	
+	@Value("${stateless.enabled}")
+	private boolean isStateless;
+	
 	@Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.resourceId(resourceId).stateless(true);
+        resources.resourceId(resourceId).stateless(isStateless);
     }
 
     @Override

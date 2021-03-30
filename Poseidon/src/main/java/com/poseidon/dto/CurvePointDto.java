@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ public class CurvePointDto {
 
 	private Integer curvePointId;
 	
+	@Positive(message="Must a positive number")
 	@NotBlank(message="Must not be null")
 	private Integer curveId;
 	

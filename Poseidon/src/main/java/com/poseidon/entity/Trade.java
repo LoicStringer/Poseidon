@@ -27,19 +27,15 @@ public class Trade {
 	private String type;
 	
 	@Column(name="buy_quantity")
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double buyQuantity;
 	
 	@Column(name="sell_quantity")
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double sellQuantity;
 	
 	@Column(name="buy_price")
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double buyPrice;
 	
 	@Column(name="sell_price")
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double sellPrice;
 	
 	@Column(name="trade_date")

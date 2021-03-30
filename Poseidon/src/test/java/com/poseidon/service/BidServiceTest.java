@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.poseidon.dao.BidDao;
 import com.poseidon.dto.BidDto;
+import com.poseidon.entity.Bid;
 import com.poseidon.exception.DuplicatedResourceException;
 import com.poseidon.exception.ResourceNotFoundException;
 
@@ -31,11 +35,14 @@ class BidServiceTest {
 	private BidService bidService;
 
 	private static BidDto testedBidDto;
+	private static List<BidDto> bidDtosList;
 
 	@BeforeAll
 	static void setUp() {
 		testedBidDto = new BidDto();
 		testedBidDto.setBidId(1);
+		bidDtosList = new ArrayList<BidDto>();
+		bidDtosList.add(testedBidDto);
 	}
 
 	@Nested
@@ -43,6 +50,12 @@ class BidServiceTest {
 	@DisplayName("Nominal cases checking")
 	class NominalCasesTests {
 
+		@Test
+		void getAllTest() {
+			when(bidDao.getAllList()).thenReturn(bidDtosList);
+			assertEquals(bidDtosList, bidService.getDtoList());
+		}
+		
 		@Test
 		void createTest() throws DuplicatedResourceException {
 			when(bidDao.create(any(BidDto.class))).thenReturn(testedBidDto);

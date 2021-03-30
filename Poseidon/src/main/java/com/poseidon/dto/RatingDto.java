@@ -1,5 +1,7 @@
 package com.poseidon.dto;
 
+import javax.validation.constraints.Positive;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -9,6 +11,8 @@ public class RatingDto {
 	private String moodysRating;
 	private String sandpRating;
 	private String fitchRating;
+	
+	@Positive(message="Must a positive number")
 	private Integer orderNumber;
 
 	public RatingDto() {

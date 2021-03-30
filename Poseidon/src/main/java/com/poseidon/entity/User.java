@@ -20,21 +20,15 @@ public class User {
     @Column(name="user_id",length = 4)
     private Integer userId;
     
-    @NotBlank(message = "Username is mandatory")
     @Column(name="user_name",length = 125)
     private String userName;
     
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\\]).{8,32}$",
-    		message = "Password must contains at least 8 characters, an upper-case letter, a digit and a symbol.")
-    @NotBlank(message = "Password is mandatory")
     @Column(name="user_password",length = 125)
     private String userPassword;
-    
-    @NotBlank(message = "FullName is mandatory")
+
     @Column(name="user_fullname",length = 125)
     private String userFullname;
     
-    @NotBlank(message = "Role is mandatory")
     @Column(name="user_role",length = 125)
     private String userRole;
     

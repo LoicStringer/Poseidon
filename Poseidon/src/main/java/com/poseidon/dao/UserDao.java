@@ -41,8 +41,6 @@ public class UserDao  implements IGenericCrudDao<UserDto,Integer>{
 	public UserDto create(UserDto userToCreate) throws DuplicatedUserException  {
 		checkUserDuplication(userToCreate.getUserName());
 		preventUserIdBreach(userToCreate.getUserId());
-		if(userRepository.existsById(userToCreate.getUserId()))
-			throw new DuplicatedUserException("Not allowed to set an id to user.");
 		userToCreate.setUserPassword(bCryptPasswordEncoder.encode(userToCreate.getUserPassword()));
 		userRepository.save(userMapper.userDtoToUser(userToCreate));
 		return userToCreate;
