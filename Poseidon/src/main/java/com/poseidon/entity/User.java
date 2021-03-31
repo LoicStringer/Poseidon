@@ -70,7 +70,7 @@ public class User {
 	}
 
 	public void setUserRole(String userRole) {
-		this.userRole = userRole.toUpperCase();
+		this.userRole = userRole;
 	}
 
 	

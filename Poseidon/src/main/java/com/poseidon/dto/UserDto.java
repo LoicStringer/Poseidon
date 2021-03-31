@@ -64,7 +64,7 @@ public class UserDto {
 	}
 
 	public void setUserRole(String userRole) {
-		this.userRole = userRole.toUpperCase();
+		this.userRole = userRole;
 	}
 
 

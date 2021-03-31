@@ -85,7 +85,7 @@ public class UserDaoTest {
 			UserDto userDtoToCreate = new UserDto(); 
 			userDtoToCreate.setUserName("Tony");
 			userDtoToCreate.setUserPassword("narcotics");
-			when(userRepository.findByUserName(any(String.class))).thenReturn(null);
+			when(userRepository.findByUserName(any(String.class))).thenReturn(Optional.empty());
 			when(bCryptPasswordEncoder.encode(any(CharSequence.class))).thenReturn(userToCreate.getUserPassword());
 			when(userMapper.userDtoToUser(userDtoToCreate)).thenReturn(userToCreate);
 			when(userRepository.save(any(User.class))).thenReturn(userToCreate);
