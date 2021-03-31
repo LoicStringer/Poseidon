@@ -64,21 +64,24 @@ public class TradeDao implements IGenericCrudDao<TradeDto,Integer>  {
 	}
 
 	private void preventResourceIdBreach(TradeDto tradeToCreate) throws NotAllowedIdSettingException {
-		if(tradeToCreate.getTradeId()!=null)
+		if(tradeToCreate.getTradeId()!=null) {
 			log.error("Id has been set to this bid before insert.");
 			throw new NotAllowedIdSettingException("Not allowed to set an id to resources.");
+		}
 	}
 
 	private void checkResourceExistence(Integer tradeId) throws ResourceNotFoundException {
-		if(!tradeRepository.existsById(tradeId))
+		if(!tradeRepository.existsById(tradeId)) {
 			log.error("The trade's id number "+tradeId+ "doesn't match any registered trade's id.");
 			throw new ResourceNotFoundException("The trade with "+tradeId+ " id number is not registered.");
+		}
 	}
 	
 	private void checkResourceIdCoherence(Integer targetTradeId, Integer treatedTradedId) throws ResourceNotFoundException {
-		if(!targetTradeId.equals(treatedTradedId))
+		if(!targetTradeId.equals(treatedTradedId)) {
 			log.error("The uri's id is different from the trade's id currently handled");
 			throw new ResourceNotFoundException("The requested trade's id "+targetTradeId+ " is different from the currently handled trade's id.");
+		}
 	}
 	
 }

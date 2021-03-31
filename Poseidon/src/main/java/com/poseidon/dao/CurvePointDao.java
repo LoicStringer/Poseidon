@@ -67,24 +67,27 @@ public class CurvePointDao implements IGenericCrudDao<CurvePointDto, Integer> {
 	}
 
 	private void preventResourceIdBreach(CurvePointDto curvePointToCreate) throws NotAllowedIdSettingException {
-		if (curvePointToCreate.getCurvePointId()!=null)
+		if (curvePointToCreate.getCurvePointId()!=null) {
 			log.error("Id has been set to this curve point before insert.");
 			throw new NotAllowedIdSettingException("Not allowed to set an id to resources.");
+		}	
 	}
 
 	private void checkResourceExistence(Integer curvePointId) throws ResourceNotFoundException {
-		if (!curvePointRepository.existsById(curvePointId))
+		if (!curvePointRepository.existsById(curvePointId)) {
 			log.error("The curve point's id number "+curvePointId+ "doesn't match any registered curve point's id.");
 			throw new ResourceNotFoundException(
 					"The curve point with " + curvePointId + " id number is not registered.");
+		}
 	}
 
 	private void checkResourceIdCoherence(Integer targetCurvePointId, Integer treatedCurvePointId)
 			throws ResourceNotFoundException {
-		if (!targetCurvePointId.equals(treatedCurvePointId))
+		if (!targetCurvePointId.equals(treatedCurvePointId)) {
 			log.error("The uri's id is different from the curve point's id currently handled");
 			throw new ResourceNotFoundException("The requested curve point's id " + targetCurvePointId
 					+ " is different from the currently handled curve point's id.");
+		}
 	}
 
 }

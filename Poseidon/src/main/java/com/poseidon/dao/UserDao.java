@@ -73,26 +73,30 @@ public class UserDao  implements IGenericCrudDao<UserDto,Integer>{
 	}
 	
 	private void checkUserDuplication(String userName) throws DuplicatedUserException {
-		if(userRepository.findByUserName(userName).isPresent())
+		if(userRepository.findByUserName(userName).isPresent()) {
 			log.error("A user with the same user name "+userName+" is present in database.");
 			throw new DuplicatedUserException("User with the same user name "+userName+" is already registered.");
+		}
 	}
 	
 	private void preventUserIdBreach(UserDto userToCreate) throws NotAllowedIdSettingException {
-		if(userToCreate.getUserId()!=null)
+		if(userToCreate.getUserId()!=null) {
 			log.error("Id has been set to this bid before insert.");
 			throw new NotAllowedIdSettingException("Not allowed to set an id to users.");
+		}
 	}
 
 	private void checkUserExistence(Integer userId) throws UserNotFoundException {
-		if(!userRepository.existsById(userId))
+		if(!userRepository.existsById(userId)) {
 			log.error("The user's id number "+userId+ "doesn't match any registered user's id.");
 			throw new UserNotFoundException("The user with "+userId+ " id number is not registered.");
+		}
 	}
 	
 	private void checkUserIdCoherence(Integer targetUserId, Integer treatedUserId) throws UserNotFoundException {
-		if(!targetUserId.equals(treatedUserId))
+		if(!targetUserId.equals(treatedUserId)) {
 			log.error("The uri's id is different from the user's id currently handled");
 			throw new UserNotFoundException("The requested user's id "+targetUserId+ " is different from the currently handled user's id.");
+		}
 	}
 }
