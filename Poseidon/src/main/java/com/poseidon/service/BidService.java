@@ -1,50 +1,47 @@
 package com.poseidon.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.poseidon.dao.BidDao;
 import com.poseidon.dto.BidDto;
-import com.poseidon.entity.Bid;
-import com.poseidon.mapper.BidMapper;
-import com.poseidon.repository.BidRepository;
+import com.poseidon.exception.NotAllowedIdSettingException;
+import com.poseidon.exception.ResourceNotFoundException;
 
 @Service
-public class BidService {
+@Transactional(rollbackOn = Exception.class)
+public class BidService implements IGenericService<BidDto,Integer>{
+	
+	@Autowired
+	private BidDao bidDao;
 
-	@Autowired
-	private BidMapper bidMapper; 
-	
-	@Autowired
-	private BidRepository bidRepository;
-	
-	public List<BidDto> getAllBids(){
-		List<Bid> bidsList = bidRepository.findAll();
-		List<BidDto> bidsDto = bidsList.stream()
-				.map(b-> bidMapper.bidToBidDto(b))
-				.collect(Collectors.toList());
-		return bidsDto;
+	@Override
+	public List<BidDto> getDtoList() {
+		return bidDao.getAllList();
 	}
-	
-	public BidDto create(BidDto bidToCreate) {
-		bidRepository.save(bidMapper.bidDtoToBid(bidToCreate));
-		return bidToCreate;
+
+	@Override
+	public BidDto create(BidDto dtoToCreate) throws NotAllowedIdSettingException {
+		return bidDao.create(dtoToCreate);
 	}
-	
-	public BidDto read(Integer id) {
-		return bidMapper.bidToBidDto(bidRepository.findById(id).orElse(null));
+
+	@Override
+	public BidDto read(Integer dtoId) throws ResourceNotFoundException {
+		return bidDao.read(dtoId);
 	}
-	
-	public BidDto update(BidDto bidToUpdate) {
-		bidRepository.save(bidMapper.bidDtoToBid(bidToUpdate));
-		return bidToUpdate;
+
+	@Override
+	public BidDto update(Integer dtoId, BidDto dtoToUpdate) throws ResourceNotFoundException {
+		return bidDao.update(dtoId, dtoToUpdate);
 	}
-		
-	public BidDto delete(BidDto bidToDelete) {
-		bidRepository.delete(bidMapper.bidDtoToBid(bidToDelete));
-		return bidToDelete;
+
+	@Override
+	public BidDto delete(Integer dtoId, BidDto dtoToDelete) throws ResourceNotFoundException {
+		return bidDao.delete(dtoId, dtoToDelete);
 	}
-	
+
 }

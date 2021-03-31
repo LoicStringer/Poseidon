@@ -2,8 +2,8 @@ package com.poseidon.mapper;
 
 import org.mapstruct.Mapper;
 
-import com.poseidon.entity.User;
 import com.poseidon.dto.UserDto;
+import com.poseidon.entity.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

@@ -1,50 +1,47 @@
 package com.poseidon.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.mapstruct.factory.Mappers;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.poseidon.dao.RuleDao;
 import com.poseidon.dto.RuleDto;
-import com.poseidon.entity.Rule;
-import com.poseidon.mapper.RuleMapper;
-import com.poseidon.repository.RuleRepository;
+import com.poseidon.exception.NotAllowedIdSettingException;
+import com.poseidon.exception.ResourceNotFoundException;
 
 @Service
-public class RuleService {
+@Transactional(rollbackOn = Exception.class)
+public class RuleService implements IGenericService<RuleDto,Integer>{
 
-	private RuleMapper ruleMapper ;
-	
 	@Autowired
-	private RuleRepository ruleRepository;
+	private RuleDao ruleDao;
 	
-	public List<RuleDto> getAllRules(){
-		List<Rule> rules = ruleRepository.findAll();
-		List<RuleDto> rulesDto = rules.stream()
-				.map(r-> ruleMapper.ruleToRuleDto(r))
-				.collect(Collectors.toList());
-		return rulesDto ;
+	@Override
+	public List<RuleDto> getDtoList() {
+		return ruleDao.getAllList();
 	}
-	
-	public RuleDto create(RuleDto ruleToCreate) {
-		ruleRepository.save(ruleMapper.ruleDtoToRule(ruleToCreate));
-		return ruleToCreate ;
+
+	@Override
+	public RuleDto create(RuleDto dtoToCreate) throws NotAllowedIdSettingException {
+		return ruleDao.create(dtoToCreate);
 	}
-	
-	public RuleDto read(Integer id) {
-		return ruleMapper.ruleToRuleDto(ruleRepository.findById(id).orElse(null));
+
+	@Override
+	public RuleDto read(Integer dtoId) throws ResourceNotFoundException {
+		return ruleDao.read(dtoId);
 	}
-	
-	public RuleDto update (RuleDto ruleToUpdate) {
-		ruleRepository.save(ruleMapper.ruleDtoToRule(ruleToUpdate));
-		return ruleToUpdate ;
+
+	@Override
+	public RuleDto update(Integer dtoId, RuleDto dtoToUpdate) throws ResourceNotFoundException {
+		return ruleDao.update(dtoId, dtoToUpdate);
 	}
-	
-	public RuleDto  delete(RuleDto ruleToDelete) {
-		ruleRepository.delete(ruleMapper.ruleDtoToRule(ruleToDelete));
-		return ruleToDelete;
+
+	@Override
+	public RuleDto delete(Integer dtoId, RuleDto dtoToDelete) throws ResourceNotFoundException {
+		return ruleDao.delete(dtoId, dtoToDelete);
 	}
-	
+
 }

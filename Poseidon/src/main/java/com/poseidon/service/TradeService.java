@@ -1,50 +1,47 @@
 package com.poseidon.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.mapstruct.factory.Mappers;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.poseidon.dao.TradeDao;
 import com.poseidon.dto.TradeDto;
-import com.poseidon.entity.Trade;
-import com.poseidon.mapper.TradeMapper;
-import com.poseidon.repository.TradeRepository;
+import com.poseidon.exception.NotAllowedIdSettingException;
+import com.poseidon.exception.ResourceNotFoundException;
 
 @Service
-public class TradeService {
+@Transactional(rollbackOn = Exception.class)
+public class TradeService implements IGenericService<TradeDto,Integer>{
 
-	private TradeMapper tradeMapper ;
-	
 	@Autowired
-	private TradeRepository tradeRepository;
+	private TradeDao tradeDao;
 	
-	public List<TradeDto> getAllTrades(){
-		List<Trade> trades = tradeRepository.findAll();
-		List<TradeDto> tradesDto = trades.stream()
-				.map(t->tradeMapper.tradeToTradeDto(t))
-				.collect(Collectors.toList());
-		return tradesDto;
+	@Override
+	public List<TradeDto> getDtoList() {
+		return tradeDao.getAllList();
 	}
-	
-	public TradeDto create(TradeDto tradeToCreate) {
-		tradeRepository.save(tradeMapper.tradeDtoToTrade(tradeToCreate));
-		return tradeToCreate;
+
+	@Override
+	public TradeDto create(TradeDto dtoToCreate) throws NotAllowedIdSettingException {
+		return tradeDao.create(dtoToCreate);
 	}
-	
-	public TradeDto read(Integer id) {
-		return tradeMapper.tradeToTradeDto(tradeRepository.findById(id).orElse(null));
+
+	@Override
+	public TradeDto read(Integer dtoId) throws ResourceNotFoundException {
+		return tradeDao.read(dtoId);
 	}
-	
-	public TradeDto update(TradeDto tradeToUpdate) {
-		tradeRepository.save(tradeMapper.tradeDtoToTrade(tradeToUpdate));
-		return tradeToUpdate;
+
+	@Override
+	public TradeDto update(Integer dtoId, TradeDto dtoToUpdate) throws ResourceNotFoundException {
+		return tradeDao.update(dtoId, dtoToUpdate);
 	}
-	
-	public TradeDto delete(TradeDto tradeToDelete) {
-		tradeRepository.delete(tradeMapper.tradeDtoToTrade(tradeToDelete));
-		return tradeToDelete;
+
+	@Override
+	public TradeDto delete(Integer dtoId, TradeDto dtoToDelete) throws ResourceNotFoundException {
+		return tradeDao.delete(dtoId, dtoToDelete);
 	}
-	
+
 }

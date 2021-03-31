@@ -7,8 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
 @SequenceGenerator(name="seq")
 @Entity
@@ -17,25 +15,19 @@ public class User {
 	
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "seq")
-    @Column(name="user_id",length = 4)
+    @Column(name="user_id")
     private Integer userId;
     
-    @NotBlank(message = "Username is mandatory")
-    @Column(name="user_name",length = 125)
+    @Column(name="user_name",length = 125,nullable=false)
     private String userName;
     
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\\]).{8,32}$",
-    		message = "Password must contains at least 8 characters, an upper-case letter, a digit and a symbol.")
-    @NotBlank(message = "Password is mandatory")
-    @Column(name="user_password",length = 125)
+    @Column(name="user_password",length = 125,nullable=false)
     private String userPassword;
-    
-    @NotBlank(message = "FullName is mandatory")
-    @Column(name="user_fullname",length = 125)
+
+    @Column(name="user_fullname",length = 125,nullable=false)
     private String userFullname;
     
-    @NotBlank(message = "Role is mandatory")
-    @Column(name="user_role",length = 125)
+    @Column(name="user_role",length = 125,nullable=false)
     private String userRole;
     
     public User() {
@@ -78,7 +70,7 @@ public class User {
 	}
 
 	public void setUserRole(String userRole) {
-		this.userRole = userRole;
+		this.userRole = userRole.toUpperCase();
 	}
 
 	

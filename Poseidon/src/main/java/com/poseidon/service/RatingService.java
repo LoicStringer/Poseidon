@@ -1,50 +1,47 @@
 package com.poseidon.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.mapstruct.factory.Mappers;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.poseidon.dao.RatingDao;
 import com.poseidon.dto.RatingDto;
-import com.poseidon.entity.Rating;
-import com.poseidon.mapper.RatingMapper;
-import com.poseidon.repository.RatingRepository;
+import com.poseidon.exception.NotAllowedIdSettingException;
+import com.poseidon.exception.ResourceNotFoundException;
 
 @Service
-public class RatingService {
+@Transactional(rollbackOn = Exception.class)
+public class RatingService implements IGenericService<RatingDto,Integer> {
 
-	private RatingMapper ratingMapper ;
-	
 	@Autowired
-	private RatingRepository ratingRepository;
-	
-	public List<RatingDto> getAllRatings(){
-		List<Rating> ratings = ratingRepository.findAll(); 
-		List<RatingDto> ratingsDto = ratings.stream()
-				.map(r-> ratingMapper.ratingToRatingDto(r))
-				.collect(Collectors.toList());
-		return ratingsDto;
+	private RatingDao ratingDao;
+
+	@Override
+	public List<RatingDto> getDtoList() {
+		return ratingDao.getAllList();
 	}
-	
-	public RatingDto create(RatingDto ratingToCreate) {
-		ratingRepository.save(ratingMapper.ratingDtoToRating(ratingToCreate));
-		return ratingToCreate;
+
+	@Override
+	public RatingDto create(RatingDto dtoToCreate) throws NotAllowedIdSettingException {
+		return ratingDao.create(dtoToCreate);
 	}
-	
-	public RatingDto read(Integer id) {
-		return ratingMapper.ratingToRatingDto(ratingRepository.findById(id).orElse(null));
+
+	@Override
+	public RatingDto read(Integer dtoId) throws ResourceNotFoundException {
+		return ratingDao.read(dtoId);
 	}
-	
-	public RatingDto update (RatingDto ratingToUpdate) {
-		ratingRepository.save(ratingMapper.ratingDtoToRating(ratingToUpdate));
-		return ratingToUpdate;
+
+	@Override
+	public RatingDto update(Integer dtoId, RatingDto dtoToUpdate) throws ResourceNotFoundException {
+		return ratingDao.update(dtoId, dtoToUpdate);
 	}
-	
-	public RatingDto delete(RatingDto ratingToDelete) {
-		ratingRepository.delete(ratingMapper.ratingDtoToRating(ratingToDelete));
-		return ratingToDelete;
+
+	@Override
+	public RatingDto delete(Integer dtoId, RatingDto dtoToDelete) throws ResourceNotFoundException {
+		return ratingDao.delete(dtoId, dtoToDelete);
 	}
-	
+
 }

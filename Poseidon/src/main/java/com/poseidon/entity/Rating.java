@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name = "rating")
@@ -14,7 +13,7 @@ public class Rating {
    
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="rating_id",length = 4)
+	@Column(name="rating_id")
 	private Integer ratingId;
 	
 	@Column(name="moodys_rating",length = 125)
@@ -26,7 +25,6 @@ public class Rating {
 	@Column(name="fitch_rating",length = 125)
 	private String fitchRating;
 	
-	@Positive
 	@Column(name="order_number")
 	private Integer orderNumber;
 

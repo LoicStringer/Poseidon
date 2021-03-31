@@ -8,9 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 
 
 @Entity
@@ -19,22 +16,18 @@ public class CurvePoint {
  	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="curve_point_id", length = 4)
+	@Column(name="curve_point_id")
 	private Integer curvePointId;
 	
-	@Positive
-	@NotBlank(message="Must not be null")
-	@Column(name="curve_Id")
+	@Column(name="curve_Id",nullable=false)
 	private Integer curveId;
 	
 	@Column(name="as_of_date")
 	private Timestamp asOfDate;
 	
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	@Column(name="term")
 	private Double term;
-	
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
+
 	@Column(name="value")
 	private Double value;
 	

@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.RuleDto;
+import com.poseidon.exception.NotAllowedIdSettingException;
+import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.RuleService;
 
 @RestController
-@RequestMapping("/rules")
+@RequestMapping("/poseidon/api/rules")
 public class RuleController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -32,70 +34,31 @@ public class RuleController {
 	@GetMapping("")
 	public ResponseEntity<List<RuleDto>> getRulesList(){
 		log.info("User has entered \"/rules\" endpoint to get the rules list");
-		return ResponseEntity.ok(ruleService.getAllRules());
+		return ResponseEntity.ok(ruleService.getDtoList());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<RuleDto> getOneRule(@PathVariable Integer id){
+	public ResponseEntity<RuleDto> getOneRule(@PathVariable Integer id) throws ResourceNotFoundException{
 		log.info("User has entered \"/rules\" endpoint to get one rule identified by " + id);
 		return ResponseEntity.ok(ruleService.read(id));
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<RuleDto> addRule(@RequestBody @Valid RuleDto ruleToAdd){
+	public ResponseEntity<RuleDto> addRule(@RequestBody @Valid RuleDto ruleToAdd) throws NotAllowedIdSettingException{
 		log.info("User has entered \"/rules\" endpoint to add a rule");
 		return ResponseEntity.ok(ruleService.create(ruleToAdd));
 	}
 	
-	@PutMapping("")
-	public ResponseEntity<RuleDto> updateRule(@RequestBody @Valid RuleDto ruleToUpdate){
+	@PutMapping("/{id}")
+	public ResponseEntity<RuleDto> updateRule(@PathVariable Integer id, @RequestBody @Valid RuleDto ruleToUpdate) throws ResourceNotFoundException{
 		log.info("User has entered \"/rules\" endpoint to update a rule identified by " + ruleToUpdate.getRuleId());
-		return ResponseEntity.ok(ruleService.update(ruleToUpdate));
+		return ResponseEntity.ok(ruleService.update(id,ruleToUpdate));
 	}
 	
-	@DeleteMapping("")
-	public ResponseEntity<RuleDto> deleteRule(@RequestBody @Valid RuleDto ruleToDelete){
+	@DeleteMapping("/{id}")
+	public ResponseEntity<RuleDto> deleteRule(@PathVariable Integer id,@RequestBody @Valid RuleDto ruleToDelete) throws ResourceNotFoundException{
 		log.info("User has entered \"/rules\" endpoint to delete a rule identified by " + ruleToDelete.getRuleId());
-		return ResponseEntity.ok(ruleService.delete(ruleToDelete));
+		return ResponseEntity.ok(ruleService.delete(id,ruleToDelete));
 	}
-	
-	/*
-    @RequestMapping("/ruleName/list")
-    public String home(Model model)
-    {
-        // TODO: find all RuleName, add to model
-        return "ruleName/list";
-    }
-
-    @GetMapping("/ruleName/add")
-    public String addRuleForm(RuleName bid) {
-        return "ruleName/add";
-    }
-
-    @PostMapping("/ruleName/validate")
-    public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return RuleName list
-        return "ruleName/add";
-    }
-
-    @GetMapping("/ruleName/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get RuleName by Id and to model then show to the form
-        return "ruleName/update";
-    }
-
-    @PostMapping("/ruleName/update/{id}")
-    public String updateRuleName(@PathVariable("id") Integer id, @Valid RuleName ruleName,
-                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update RuleName and return RuleName list
-        return "redirect:/ruleName/list";
-    }
-
-    @GetMapping("/ruleName/delete/{id}")
-    public String deleteRuleName(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find RuleName by Id and delete the RuleName, return to Rule list
-        return "redirect:/ruleName/list";
-    }
-	 */
 	
 }

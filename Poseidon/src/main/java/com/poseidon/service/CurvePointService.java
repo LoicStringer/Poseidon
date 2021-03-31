@@ -1,50 +1,47 @@
 package com.poseidon.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.mapstruct.factory.Mappers;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.poseidon.dao.CurvePointDao;
 import com.poseidon.dto.CurvePointDto;
-import com.poseidon.entity.CurvePoint;
-import com.poseidon.mapper.CurvePointMapper;
-import com.poseidon.repository.CurvePointRepository;
+import com.poseidon.exception.NotAllowedIdSettingException;
+import com.poseidon.exception.ResourceNotFoundException;
 
 @Service
-public class CurvePointService {
-
-	private CurvePointMapper curvePointMapper;
+@Transactional(rollbackOn = Exception.class)
+public class CurvePointService implements IGenericService<CurvePointDto, Integer>{
 	
 	@Autowired
-	private CurvePointRepository curvePointRepository;
-	
-	public List<CurvePointDto> getAllCurvePoints(){
-		List<CurvePoint> curvePoints = curvePointRepository.findAll();
-		List<CurvePointDto> curvePointsDto = curvePoints.stream()
-				.map(cp->curvePointMapper.curvePointToCurvePointDto(cp))
-				.collect(Collectors.toList());
-		return curvePointsDto;
+	private CurvePointDao curvePointDao;
+
+	@Override
+	public List<CurvePointDto> getDtoList() {
+		return curvePointDao.getAllList();
 	}
-	
-	public CurvePointDto create(CurvePointDto curvePointToCreate) {
-		curvePointRepository.save(curvePointMapper.curvePointDtoToCurvePoint(curvePointToCreate));
-		return curvePointToCreate;
+
+	@Override
+	public CurvePointDto create(CurvePointDto dtoToCreate) throws NotAllowedIdSettingException {
+		return curvePointDao.create(dtoToCreate);
 	}
-	
-	public CurvePointDto read(Integer id) {
-		return curvePointMapper.curvePointToCurvePointDto(curvePointRepository.findById(id).orElse(null));
+
+	@Override
+	public CurvePointDto read(Integer dtoId) throws ResourceNotFoundException {
+		return curvePointDao.read(dtoId);
 	}
-	
-	public CurvePointDto update (CurvePointDto curvePointToUpdate) {
-		curvePointRepository.save(curvePointMapper.curvePointDtoToCurvePoint(curvePointToUpdate));
-		return curvePointToUpdate;
+
+	@Override
+	public CurvePointDto update(Integer dtoId, CurvePointDto dtoToUpdate) throws ResourceNotFoundException {
+		return curvePointDao.update(dtoId, dtoToUpdate);
 	}
-	
-	public CurvePointDto  delete(CurvePointDto curvePointToDelete) {
-		curvePointRepository.delete(curvePointMapper.curvePointDtoToCurvePoint(curvePointToDelete));
-		return curvePointToDelete;
+
+	@Override
+	public CurvePointDto delete(Integer dtoId, CurvePointDto dtoToDelete) throws ResourceNotFoundException {
+		return curvePointDao.delete(dtoId, dtoToDelete);
 	}
-	
+
 }

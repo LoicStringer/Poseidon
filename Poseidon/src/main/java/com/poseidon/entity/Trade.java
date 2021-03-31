@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.DecimalMin;
 
 
 @Entity
@@ -17,7 +16,7 @@ public class Trade {
    
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="trade_id",length = 4)
+	@Column(name="trade_id")
 	private Integer tradeId;
 	
 	@Column(name="account",length = 30)
@@ -27,19 +26,15 @@ public class Trade {
 	private String type;
 	
 	@Column(name="buy_quantity")
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double buyQuantity;
 	
 	@Column(name="sell_quantity")
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double sellQuantity;
 	
 	@Column(name="buy_price")
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double buyPrice;
 	
 	@Column(name="sell_price")
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double sellPrice;
 	
 	@Column(name="trade_date")

@@ -1,55 +1,48 @@
 package com.poseidon.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.poseidon.dao.UserDao;
 import com.poseidon.dto.UserDto;
-import com.poseidon.entity.User;
-import com.poseidon.mapper.UserMapper;
-import com.poseidon.repository.UserRepository;
+import com.poseidon.exception.DuplicatedUserException;
+import com.poseidon.exception.NotAllowedIdSettingException;
+import com.poseidon.exception.UserNotFoundException;
 
 @Service
-public class UserService {
+@Transactional(rollbackOn = Exception.class)
+public class UserService implements IGenericService<UserDto,Integer>{
 	
-	private UserMapper userMapper ;
+	@Autowired
+	private UserDao userDao;
 
-	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
-	public List<UserDto> getAllUsers(){
-		List<User> users = userRepository.findAll();
-		List<UserDto> usersDto = users.stream()
-				.map(u->userMapper.userToUserDto(u))
-				.collect(Collectors.toList());
-		return usersDto;
+	@Override
+	public List<UserDto> getDtoList() {
+		return userDao.getAllList();
 	}
-	
-	public UserDto create(UserDto userToCreate) {
-		userToCreate.setUserPassword(bCryptPasswordEncoder.encode(userToCreate.getUserPassword()));
-		userRepository.save(userMapper.userDtoToUser(userToCreate));
-		return userToCreate ;
+
+	@Override
+	public UserDto create(UserDto dtoToCreate) throws DuplicatedUserException, NotAllowedIdSettingException {
+		return userDao.create(dtoToCreate);
 	}
-	
-	public UserDto read(Integer id) {
-		return userMapper.userToUserDto(userRepository.findById(id).orElse(null));
+
+	@Override
+	public UserDto read(Integer dtoId) throws UserNotFoundException {
+		return userDao.read(dtoId);
 	}
-	
-	public UserDto update(UserDto userToUpdate) {
-		userToUpdate.setUserPassword(bCryptPasswordEncoder.encode(userToUpdate.getUserPassword()));
-		userRepository.save(userMapper.userDtoToUser(userToUpdate));
-		return userToUpdate ;
+
+	@Override
+	public UserDto update(Integer dtoId, UserDto dtoToUpdate) throws UserNotFoundException {
+		return userDao.update(dtoId, dtoToUpdate);
 	}
-	
-	public UserDto delete(UserDto userToDelete) {
-		userRepository.delete(userMapper.userDtoToUser(userToDelete));
-		return userToDelete;
+
+	@Override
+	public UserDto delete(Integer dtoId, UserDto dtoToDelete) throws UserNotFoundException {
+		return userDao.delete(dtoId, dtoToDelete);
 	}
 	
 }

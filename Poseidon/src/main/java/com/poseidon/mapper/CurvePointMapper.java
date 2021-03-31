@@ -2,8 +2,8 @@ package com.poseidon.mapper;
 
 import org.mapstruct.Mapper;
 
-import com.poseidon.entity.CurvePoint;
 import com.poseidon.dto.CurvePointDto;
+import com.poseidon.entity.CurvePoint;
 
 @Mapper(componentModel = "spring")
 public interface CurvePointMapper {

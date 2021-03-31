@@ -8,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "bid")
@@ -17,30 +15,24 @@ public class Bid {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name="bid_id",length=4,nullable=false)
+	@Column(name="bid_id")
 	private Integer bidId;
 	
-	@NotBlank(message = "Account is mandatory")
 	@Column(name="account",length=30,nullable=false)
 	private String account;
 	
-	@NotBlank(message="Type is mandatory")
 	@Column(name="type",length=30,nullable=false)
 	private String type;
 	
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	@Column(name="bid_quantity")
 	private Double bidQuantity;
 	
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	@Column(name="ask_quantity")
 	private Double askQuantity;
 	
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	@Column(name="bid")
 	private Double bid;
 	
-	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	@Column(name="ask")
 	private Double ask;
 	
