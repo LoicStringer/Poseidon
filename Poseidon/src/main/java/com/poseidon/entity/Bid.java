@@ -8,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "bid")
@@ -17,7 +15,7 @@ public class Bid {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name="bid_id",length=4,nullable=false)
+	@Column(name="bid_id")
 	private Integer bidId;
 	
 	@Column(name="account",length=30,nullable=false)

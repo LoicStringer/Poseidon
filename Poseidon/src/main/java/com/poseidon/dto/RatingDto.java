@@ -12,7 +12,7 @@ public class RatingDto {
 	private String sandpRating;
 	private String fitchRating;
 	
-	@Positive(message="Must a positive number")
+	@Positive(message="Must be a positive number")
 	private Integer orderNumber;
 
 	public RatingDto() {

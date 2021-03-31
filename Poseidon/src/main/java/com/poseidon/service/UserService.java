@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.poseidon.dao.UserDao;
 import com.poseidon.dto.UserDto;
 import com.poseidon.exception.DuplicatedUserException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.UserNotFoundException;
 
 @Service
@@ -25,7 +26,7 @@ public class UserService implements IGenericService<UserDto,Integer>{
 	}
 
 	@Override
-	public UserDto create(UserDto dtoToCreate) throws DuplicatedUserException {
+	public UserDto create(UserDto dtoToCreate) throws DuplicatedUserException, NotAllowedIdSettingException {
 		return userDao.create(dtoToCreate);
 	}
 

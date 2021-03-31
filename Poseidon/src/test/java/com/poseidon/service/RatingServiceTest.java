@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.poseidon.dao.RatingDao;
 import com.poseidon.dto.RatingDto;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 
 @DisplayName("RatingService CRUD operations tests")
@@ -44,7 +44,7 @@ class RatingServiceTest {
 	class NominalCasesTests {
 
 		@Test
-		void createTest() throws DuplicatedResourceException {
+		void createTest() throws NotAllowedIdSettingException {
 			when(ratingDao.create(any(RatingDto.class))).thenReturn(testedRatingDto);
 			assertEquals(testedRatingDto, ratingService.create(testedRatingDto));
 		}
@@ -75,9 +75,9 @@ class RatingServiceTest {
 	class ExceptionsTests {
 
 		@Test
-		void isExpectedExceptionThrownWhenCreatingAlreadyExistingRatingTest() throws DuplicatedResourceException {
-			when(ratingDao.create(testedRatingDto)).thenThrow(DuplicatedResourceException.class);
-			assertThrows(DuplicatedResourceException.class, () -> ratingService.create(testedRatingDto));
+		void isExpectedExceptionThrownWhenCreatingAlreadyExistingRatingTest() throws NotAllowedIdSettingException {
+			when(ratingDao.create(testedRatingDto)).thenThrow(NotAllowedIdSettingException.class);
+			assertThrows(NotAllowedIdSettingException.class, () -> ratingService.create(testedRatingDto));
 		}
 
 		@Test

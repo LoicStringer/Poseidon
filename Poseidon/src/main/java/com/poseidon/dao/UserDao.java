@@ -9,9 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.poseidon.dto.UserDto;
 import com.poseidon.entity.User;
-import com.poseidon.exception.DuplicatedResourceException;
 import com.poseidon.exception.DuplicatedUserException;
-import com.poseidon.exception.ResourceNotFoundException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.UserNotFoundException;
 import com.poseidon.mapper.UserMapper;
 import com.poseidon.repository.UserRepository;
@@ -38,9 +37,9 @@ public class UserDao  implements IGenericCrudDao<UserDto,Integer>{
 	}
 	
 	@Override
-	public UserDto create(UserDto userToCreate) throws DuplicatedUserException  {
+	public UserDto create(UserDto userToCreate) throws DuplicatedUserException, NotAllowedIdSettingException  {
+		preventUserIdBreach(userToCreate);
 		checkUserDuplication(userToCreate.getUserName());
-		preventUserIdBreach(userToCreate.getUserId());
 		userToCreate.setUserPassword(bCryptPasswordEncoder.encode(userToCreate.getUserPassword()));
 		userRepository.save(userMapper.userDtoToUser(userToCreate));
 		return userToCreate;
@@ -70,13 +69,13 @@ public class UserDao  implements IGenericCrudDao<UserDto,Integer>{
 	}
 	
 	private void checkUserDuplication(String userName) throws DuplicatedUserException {
-		if(userRepository.findByUserName(userName)!=null)
+		if(userRepository.findByUserName(userName).isPresent())
 			throw new DuplicatedUserException("User with the same user name "+userName+" is already registered.");
 	}
 	
-	private void preventUserIdBreach(Integer userId) throws DuplicatedUserException {
-		if(userRepository.existsById(userId))
-			throw new DuplicatedUserException("Not allowed to set an id to users.");
+	private void preventUserIdBreach(UserDto userToCreate) throws NotAllowedIdSettingException {
+		if(userToCreate.getUserId()!=null)
+			throw new NotAllowedIdSettingException("Not allowed to set an id to users.");
 	}
 
 	private void checkUserExistence(Integer userId) throws UserNotFoundException {

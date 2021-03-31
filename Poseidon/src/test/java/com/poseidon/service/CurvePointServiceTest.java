@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.poseidon.dao.CurvePointDao;
 import com.poseidon.dto.CurvePointDto;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 
 @DisplayName("CurvePointService CRUD operations tests")
@@ -43,7 +43,7 @@ class CurvePointServiceTest {
 	class NominalCasesTests {
 
 		@Test
-		void createTest() throws DuplicatedResourceException {
+		void createTest() throws NotAllowedIdSettingException {
 			when(curvePointDao.create(any(CurvePointDto.class))).thenReturn(testedCurvePointDto);
 			assertEquals(testedCurvePointDto, curvePointService.create(testedCurvePointDto));
 		}
@@ -74,9 +74,9 @@ class CurvePointServiceTest {
 	class ExceptionsTests {
 
 		@Test
-		void isExpectedExceptionThrownWhenCreatingAlreadyExistingCurvePointTest() throws DuplicatedResourceException {
-			when(curvePointDao.create(testedCurvePointDto)).thenThrow(DuplicatedResourceException.class);
-			assertThrows(DuplicatedResourceException.class, () -> curvePointService.create(testedCurvePointDto));
+		void isExpectedExceptionThrownWhenCreatingAlreadyExistingCurvePointTest() throws NotAllowedIdSettingException {
+			when(curvePointDao.create(testedCurvePointDto)).thenThrow(NotAllowedIdSettingException.class);
+			assertThrows(NotAllowedIdSettingException.class, () -> curvePointService.create(testedCurvePointDto));
 		}
 
 		@Test

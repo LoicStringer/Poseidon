@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.poseidon.dao.CurvePointDao;
 import com.poseidon.dto.CurvePointDto;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 
 @Service
@@ -25,7 +25,7 @@ public class CurvePointService implements IGenericService<CurvePointDto, Integer
 	}
 
 	@Override
-	public CurvePointDto create(CurvePointDto dtoToCreate) throws DuplicatedResourceException {
+	public CurvePointDto create(CurvePointDto dtoToCreate) throws NotAllowedIdSettingException {
 		return curvePointDao.create(dtoToCreate);
 	}
 

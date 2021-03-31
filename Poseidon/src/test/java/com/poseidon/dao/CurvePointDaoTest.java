@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.poseidon.dto.CurvePointDto;
 import com.poseidon.entity.CurvePoint;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.mapper.CurvePointMapper;
 import com.poseidon.repository.CurvePointRepository;
@@ -69,10 +69,14 @@ public class CurvePointDaoTest {
 		}
 
 		@Test
-		void createTest() throws DuplicatedResourceException {
-			when(curvePointMapper.curvePointDtoToCurvePoint(testedCurvePointDto)).thenReturn(testedCurvePoint);
-			when(curvePointRepository.save(any(CurvePoint.class))).thenReturn(testedCurvePoint);
-			assertEquals(testedCurvePointDto, curvePointDao.create(testedCurvePointDto));
+		void createTest() throws NotAllowedIdSettingException {
+			CurvePoint curvePointToCreate = new CurvePoint();
+			curvePointToCreate.setCurveId(1);
+			CurvePointDto curvePointDtoToCreate = new CurvePointDto(); 
+			curvePointDtoToCreate.setCurveId(1);
+			when(curvePointMapper.curvePointDtoToCurvePoint(curvePointDtoToCreate)).thenReturn(curvePointToCreate);
+			when(curvePointRepository.save(any(CurvePoint.class))).thenReturn(curvePointToCreate);
+			assertEquals(curvePointDtoToCreate, curvePointDao.create(curvePointDtoToCreate));
 		}
 
 		@Test
@@ -103,14 +107,13 @@ public class CurvePointDaoTest {
 	class ExceptionsTests {
 		
 		@Test
-		void isExpectedExceptionThrownWhenBidIsNotFound() {
+		void isExpectedExceptionThrownWhenCurvePointIsNotFound() {
 			assertThrows(ResourceNotFoundException.class, ()->curvePointDao.read(2));
 		}
 		
 		@Test
 		void isExpectedExceptionThrownWhenTryingToSetAnIdBeforeCreate() {
-			when(curvePointRepository.existsById(any(Integer.class))).thenReturn(true);
-			assertThrows(DuplicatedResourceException.class,()->curvePointDao.create(testedCurvePointDto));
+			assertThrows(NotAllowedIdSettingException.class,()->curvePointDao.create(testedCurvePointDto));
 		}
 		
 		@Test

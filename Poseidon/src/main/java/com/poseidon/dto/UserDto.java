@@ -13,7 +13,7 @@ public class UserDto {
 	@NotBlank(message = "Username is mandatory")
     private String userName;
     
-	@Pattern(regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\\]).{8,32}$",
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$",
     message = "Password must contains at least 8 characters, an upper-case letter, a digit and a symbol.")
     @NotBlank(message = "Password is mandatory")
     private String userPassword;
@@ -64,9 +64,8 @@ public class UserDto {
 	}
 
 	public void setUserRole(String userRole) {
-		this.userRole = userRole;
+		this.userRole = userRole.toUpperCase();
 	}
-	
-	
-    
+
+
 }

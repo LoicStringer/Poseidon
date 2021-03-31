@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.poseidon.dao.TradeDao;
 import com.poseidon.dto.TradeDto;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 
 @DisplayName("TradeService CRUD operations tests")
@@ -44,7 +44,7 @@ class TradeServiceTest {
 	class NominalCasesTests {
 
 		@Test
-		void createTest() throws DuplicatedResourceException {
+		void createTest() throws NotAllowedIdSettingException {
 			when(tradedao.create(any(TradeDto.class))).thenReturn(testedTradeDto);
 			assertEquals(testedTradeDto, tradeService.create(testedTradeDto));
 		}
@@ -75,9 +75,9 @@ class TradeServiceTest {
 	class ExceptionsTests {
 
 		@Test
-		void isExpectedExceptionThrownWhenCreatingAlreadyExistingTradeTest() throws DuplicatedResourceException {
-			when(tradedao.create(testedTradeDto)).thenThrow(DuplicatedResourceException.class);
-			assertThrows(DuplicatedResourceException.class, () -> tradeService.create(testedTradeDto));
+		void isExpectedExceptionThrownWhenCreatingAlreadyExistingTradeTest() throws NotAllowedIdSettingException {
+			when(tradedao.create(testedTradeDto)).thenThrow(NotAllowedIdSettingException.class);
+			assertThrows(NotAllowedIdSettingException.class, () -> tradeService.create(testedTradeDto));
 		}
 
 		@Test

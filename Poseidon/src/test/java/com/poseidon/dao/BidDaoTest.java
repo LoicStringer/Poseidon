@@ -2,15 +2,14 @@ package com.poseidon.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
@@ -22,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.poseidon.dto.BidDto;
 import com.poseidon.entity.Bid;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.mapper.BidMapper;
 import com.poseidon.repository.BidRepository;
@@ -44,7 +43,7 @@ public class BidDaoTest {
 	private static List<Bid> bidsList;
 	private static BidDto testedBidDto;
 	private static List<BidDto> bidDtosList;
-
+	
 	@BeforeAll
 	static void setUp() {
 		testedBid = new Bid();
@@ -70,10 +69,14 @@ public class BidDaoTest {
 		}
 
 		@Test
-		void createTest() throws DuplicatedResourceException {
-			when(bidMapper.bidDtoToBid(testedBidDto)).thenReturn(testedBid);
-			when(bidRepository.save(any(Bid.class))).thenReturn(testedBid);
-			assertEquals(testedBidDto, bidDao.create(testedBidDto));
+		void createTest() throws NotAllowedIdSettingException {
+			Bid bidToCreate = new Bid();
+			bidToCreate.setAccount("GamblingAccount");
+			BidDto bidDtoToCreate = new BidDto(); 
+			bidDtoToCreate.setAccount("GamblingAccount");
+			when(bidMapper.bidDtoToBid(bidDtoToCreate)).thenReturn(bidToCreate);
+			when(bidRepository.save(any(Bid.class))).thenReturn(bidToCreate);
+			assertEquals(bidDtoToCreate, bidDao.create(bidDtoToCreate));
 		}
 
 		@Test
@@ -110,8 +113,7 @@ public class BidDaoTest {
 		
 		@Test
 		void isExpectedExceptionThrownWhenTryingToSetAnIdBeforeCreate() {
-			when(bidRepository.existsById(any(Integer.class))).thenReturn(true);
-			assertThrows(DuplicatedResourceException.class,()->bidDao.create(testedBidDto));
+			assertThrows(NotAllowedIdSettingException.class,()->bidDao.create(testedBidDto));
 		}
 		
 		@Test

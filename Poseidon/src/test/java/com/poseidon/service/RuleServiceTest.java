@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.poseidon.dao.RuleDao;
 import com.poseidon.dto.RuleDto;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 
 @DisplayName("RuleService CRUD operations tests")
@@ -44,7 +44,7 @@ class RuleServiceTest {
 	class NominalCasesTests {
 
 		@Test
-		void createTest() throws DuplicatedResourceException {
+		void createTest() throws NotAllowedIdSettingException {
 			when(ruleDao.create(any(RuleDto.class))).thenReturn(testedRuleDto);
 			assertEquals(testedRuleDto, ruleService.create(testedRuleDto));
 		}
@@ -75,9 +75,9 @@ class RuleServiceTest {
 	class ExceptionsTests {
 
 		@Test
-		void isExpectedExceptionThrownWhenCreatingAlreadyExistingRuleTest() throws DuplicatedResourceException {
-			when(ruleDao.create(testedRuleDto)).thenThrow(DuplicatedResourceException.class);
-			assertThrows(DuplicatedResourceException.class, () -> ruleService.create(testedRuleDto));
+		void isExpectedExceptionThrownWhenCreatingAlreadyExistingRuleTest() throws NotAllowedIdSettingException {
+			when(ruleDao.create(testedRuleDto)).thenThrow(NotAllowedIdSettingException.class);
+			assertThrows(NotAllowedIdSettingException.class, () -> ruleService.create(testedRuleDto));
 		}
 
 		@Test

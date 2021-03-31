@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-import org.mockito.InjectMocks;
-import org.springframework.test.context.ContextConfiguration;
 
 import com.poseidon.dto.BidDto;
 import com.poseidon.entity.Bid;

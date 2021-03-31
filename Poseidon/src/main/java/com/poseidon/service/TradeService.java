@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.poseidon.dao.TradeDao;
 import com.poseidon.dto.TradeDto;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 
 @Service
@@ -25,7 +25,7 @@ public class TradeService implements IGenericService<TradeDto,Integer>{
 	}
 
 	@Override
-	public TradeDto create(TradeDto dtoToCreate) throws DuplicatedResourceException {
+	public TradeDto create(TradeDto dtoToCreate) throws NotAllowedIdSettingException {
 		return tradeDao.create(dtoToCreate);
 	}
 

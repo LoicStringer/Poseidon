@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.poseidon.dto.RuleDto;
 import com.poseidon.entity.Rule;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.mapper.RuleMapper;
 import com.poseidon.repository.RuleRepository;
@@ -69,10 +69,14 @@ public class RuleDaoTest {
 		}
 
 		@Test
-		void createTest() throws DuplicatedResourceException {
-			when(ruleMapper.ruleDtoToRule(testedRuleDto)).thenReturn(testedRule);
-			when(ruleRepository.save(any(Rule.class))).thenReturn(testedRule);
-			assertEquals(testedRuleDto, ruleDao.create(testedRuleDto));
+		void createTest() throws NotAllowedIdSettingException {
+			Rule ruleToCreate = new Rule();
+			ruleToCreate.setName("Tallion");
+			RuleDto ruleDtoToCreate = new RuleDto(); 
+			ruleDtoToCreate.setName("Tallion");
+			when(ruleMapper.ruleDtoToRule(ruleDtoToCreate)).thenReturn(ruleToCreate);
+			when(ruleRepository.save(any(Rule.class))).thenReturn(ruleToCreate);
+			assertEquals(ruleDtoToCreate, ruleDao.create(ruleDtoToCreate));
 		}
 
 		@Test
@@ -109,8 +113,7 @@ public class RuleDaoTest {
 		
 		@Test
 		void isExpectedExceptionThrownWhenTryingToSetAnIdBeforeCreate() {
-			when(ruleRepository.existsById(any(Integer.class))).thenReturn(true);
-			assertThrows(DuplicatedResourceException.class,()->ruleDao.create(testedRuleDto));
+			assertThrows(NotAllowedIdSettingException.class,()->ruleDao.create(testedRuleDto));
 		}
 		
 		@Test

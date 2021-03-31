@@ -4,12 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.poseidon.dto.CurvePointDto;
 import com.poseidon.entity.CurvePoint;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.mapper.CurvePointMapper;
 import com.poseidon.repository.CurvePointRepository;
@@ -32,8 +31,8 @@ public class CurvePointDao implements IGenericCrudDao<CurvePointDto, Integer> {
 	}
 
 	@Override
-	public CurvePointDto create(CurvePointDto curvePointToCreate) throws DuplicatedResourceException {
-		preventResourceIdBreach(curvePointToCreate.getCurvePointId());
+	public CurvePointDto create(CurvePointDto curvePointToCreate) throws NotAllowedIdSettingException {
+		preventResourceIdBreach(curvePointToCreate);
 		curvePointRepository.save(curvePointMapper.curvePointDtoToCurvePoint(curvePointToCreate));
 		return curvePointToCreate;
 	}
@@ -63,9 +62,9 @@ public class CurvePointDao implements IGenericCrudDao<CurvePointDto, Integer> {
 		return curvePointToDelete;
 	}
 
-	private void preventResourceIdBreach(Integer curvePointId) throws DuplicatedResourceException {
-		if (curvePointRepository.existsById(curvePointId))
-			throw new DuplicatedResourceException("Not allowed to set an id to resources.");
+	private void preventResourceIdBreach(CurvePointDto curvePointToCreate) throws NotAllowedIdSettingException {
+		if (curvePointToCreate.getCurvePointId()!=null)
+			throw new NotAllowedIdSettingException("Not allowed to set an id to resources.");
 	}
 
 	private void checkResourceExistence(Integer curvePointId) throws ResourceNotFoundException {

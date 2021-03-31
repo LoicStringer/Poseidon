@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.poseidon.dto.RatingDto;
 import com.poseidon.entity.Rating;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.mapper.RatingMapper;
 import com.poseidon.repository.RatingRepository;
@@ -32,8 +32,8 @@ public class RatingDao implements IGenericCrudDao<RatingDto,Integer>  {
 	}
 
 	@Override
-	public RatingDto create(RatingDto ratingToCreate) throws DuplicatedResourceException {
-		preventResourceIdBreach(ratingToCreate.getRatingId());
+	public RatingDto create(RatingDto ratingToCreate) throws NotAllowedIdSettingException {
+		preventResourceIdBreach(ratingToCreate);
 		ratingRepository.save(ratingMapper.ratingDtoToRating(ratingToCreate));
 		return ratingToCreate;
 	}
@@ -60,9 +60,9 @@ public class RatingDao implements IGenericCrudDao<RatingDto,Integer>  {
 		return ratingToDelete;
 	}
 
-	private void preventResourceIdBreach(Integer ratingId) throws DuplicatedResourceException {
-		if(ratingRepository.existsById(ratingId))
-			throw new DuplicatedResourceException("Not allowed to set an id to resources.");
+	private void preventResourceIdBreach(RatingDto ratingToCreate) throws NotAllowedIdSettingException {
+		if(ratingToCreate.getRatingId()!=null)
+			throw new NotAllowedIdSettingException("Not allowed to set an id to resources.");
 	}
 
 	private void checkResourceExistence(Integer ratingId) throws ResourceNotFoundException {

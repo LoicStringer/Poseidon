@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poseidon.dto.RatingDto;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.service.RatingService;
 
@@ -44,59 +44,21 @@ public class RatingController {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<RatingDto> addRating(@RequestBody @Valid RatingDto ratingToAdd) throws DuplicatedResourceException{
+	public ResponseEntity<RatingDto> addRating(@RequestBody @Valid RatingDto ratingToAdd) throws NotAllowedIdSettingException{
 		log.info("User has entered \"/ratings\" endpoint to add a rating");
 		return ResponseEntity.ok(ratingService.create(ratingToAdd));
 	}
 	
-	@PutMapping("")
+	@PutMapping("/{id}")
 	public ResponseEntity<RatingDto> updateRating(@PathVariable Integer id, @RequestBody @Valid RatingDto ratingToUpdate) throws ResourceNotFoundException{
 		log.info("User has entered \"/ratings\" endpoint to update a rating identified by " + ratingToUpdate.getRatingId());
 		return ResponseEntity.ok(ratingService.update(id,ratingToUpdate));
 	}
 	
-	@DeleteMapping("")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<RatingDto> deleteRating(@PathVariable Integer id, @RequestBody @Valid RatingDto ratingToDelete) throws ResourceNotFoundException{
 		log.info("User has entered \"/ratings\" endpoint to delete a Rating identified by " + ratingToDelete.getRatingId());
 		return ResponseEntity.ok(ratingService.delete(id,ratingToDelete));
 	}
 	
-	/*
-    @RequestMapping("/rating/list")
-    public String home(Model model)
-    {
-        // TODO: find all Rating, add to model
-        return "rating/list";
-    }
-
-    @GetMapping("/rating/add")
-    public String addRatingForm(Rating rating) {
-        return "rating/add";
-    }
-
-    @PostMapping("/rating/validate")
-    public String validate(@Valid Rating rating, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Rating list
-        return "rating/add";
-    }
-
-    @GetMapping("/rating/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Rating by Id and to model then show to the form
-        return "rating/update";
-    }
-
-    @PostMapping("/rating/update/{id}")
-    public String updateRating(@PathVariable("id") Integer id, @Valid Rating rating,
-                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Rating and return Rating list
-        return "redirect:/rating/list";
-    }
-
-    @GetMapping("/rating/delete/{id}")
-    public String deleteRating(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Rating by Id and delete the Rating, return to Rating list
-        return "redirect:/rating/list";
-    }
-    */
 }

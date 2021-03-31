@@ -20,8 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.poseidon.dao.BidDao;
 import com.poseidon.dto.BidDto;
-import com.poseidon.entity.Bid;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 
 @DisplayName("BidService CRUD operations tests")
@@ -57,7 +56,7 @@ class BidServiceTest {
 		}
 		
 		@Test
-		void createTest() throws DuplicatedResourceException {
+		void createTest() throws NotAllowedIdSettingException {
 			when(bidDao.create(any(BidDto.class))).thenReturn(testedBidDto);
 			assertEquals(testedBidDto, bidService.create(testedBidDto));
 		}
@@ -88,9 +87,9 @@ class BidServiceTest {
 	class ExceptionsTests {
 
 		@Test
-		void isExpectedExceptionThrownWhenCreatingAlreadyExistingBidTest() throws DuplicatedResourceException {
-			when(bidDao.create(testedBidDto)).thenThrow(DuplicatedResourceException.class);
-			assertThrows(DuplicatedResourceException.class, () -> bidService.create(testedBidDto));
+		void isExpectedExceptionThrownWhenCreatingAlreadyExistingBidTest() throws NotAllowedIdSettingException {
+			when(bidDao.create(testedBidDto)).thenThrow(NotAllowedIdSettingException.class);
+			assertThrows(NotAllowedIdSettingException.class, () -> bidService.create(testedBidDto));
 		}
 
 		@Test

@@ -23,27 +23,12 @@ public class DemoController{
 	
 	@RequestMapping("/poseidon/login")
 	public String accessLogin() {
-		return "Login page";
+		return "Welcome to login page !";
 	}
 	
 	@RequestMapping("/poseidon/api")
 	public String accessApiResources() {
 		return "Welcome to Poseidon resources api.";
 	}
-	
-	
-	/*
-	@RequestMapping("/")
-	public String home(Model model)
-	{
-		return "home";
-	}
-
-	@RequestMapping("/admin/home")
-	public String adminHome(Model model)
-	{
-		return "redirect:/bidList/list";
-	}
-	*/
 	
 }

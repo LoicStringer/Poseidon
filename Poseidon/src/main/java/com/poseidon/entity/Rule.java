@@ -13,7 +13,7 @@ public class Rule {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="rule_id",length = 4)
+	@Column(name="rule_id")
 	private Integer ruleId;
 	
 	@Column(name="name",length = 125)

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.poseidon.dto.TradeDto;
 import com.poseidon.entity.Trade;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.mapper.TradeMapper;
 import com.poseidon.repository.TradeRepository;
@@ -31,8 +31,8 @@ public class TradeDao implements IGenericCrudDao<TradeDto,Integer>  {
 	}
 
 	@Override
-	public TradeDto create(TradeDto tradeToCreate) throws DuplicatedResourceException {
-		preventResourceIdBreach(tradeToCreate.getTradeId());
+	public TradeDto create(TradeDto tradeToCreate) throws NotAllowedIdSettingException {
+		preventResourceIdBreach(tradeToCreate);
 		tradeRepository.save(tradeMapper.tradeDtoToTrade(tradeToCreate));
 		return tradeToCreate;
 	}
@@ -59,9 +59,9 @@ public class TradeDao implements IGenericCrudDao<TradeDto,Integer>  {
 		return tradeToDelete;
 	}
 
-	private void preventResourceIdBreach(Integer tradeId) throws DuplicatedResourceException {
-		if(tradeRepository.existsById(tradeId))
-			throw new DuplicatedResourceException("Not allowed to set an id to resources.");
+	private void preventResourceIdBreach(TradeDto tradeToCreate) throws NotAllowedIdSettingException {
+		if(tradeToCreate.getTradeId()!=null)
+			throw new NotAllowedIdSettingException("Not allowed to set an id to resources.");
 	}
 
 	private void checkResourceExistence(Integer tradeId) throws ResourceNotFoundException {

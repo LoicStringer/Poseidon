@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.poseidon.dao.UserDao;
 import com.poseidon.dto.UserDto;
 import com.poseidon.exception.DuplicatedUserException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.UserNotFoundException;
 
 @DisplayName("UserService CRUD operations tests")
@@ -45,7 +46,7 @@ class UserServiceTest {
 	class NominalCasesTests {
 
 		@Test
-		void createTest() throws DuplicatedUserException {
+		void createTest() throws DuplicatedUserException, NotAllowedIdSettingException {
 			when(userDao.create(any(UserDto.class))).thenReturn(testedUserDto);
 			assertEquals(testedUserDto, userService.create(testedUserDto));
 		}
@@ -76,7 +77,7 @@ class UserServiceTest {
 	class ExceptionsTests {
 
 		@Test
-		void isExpectedExceptionThrownWhenCreatingAlreadyExistingUserTest() throws DuplicatedUserException {
+		void isExpectedExceptionThrownWhenCreatingAlreadyExistingUserTest() throws DuplicatedUserException, NotAllowedIdSettingException {
 			when(userDao.create(testedUserDto)).thenThrow(DuplicatedUserException.class);
 			assertThrows(DuplicatedUserException.class, () -> userService.create(testedUserDto));
 		}

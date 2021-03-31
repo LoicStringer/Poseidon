@@ -4,12 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Repository;
 
 import com.poseidon.dto.BidDto;
 import com.poseidon.entity.Bid;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.mapper.BidMapper;
 import com.poseidon.repository.BidRepository;
@@ -33,8 +32,8 @@ public class BidDao implements IGenericCrudDao<BidDto,Integer>  {
 	}
 
 	@Override
-	public BidDto create(BidDto bidToCreate) throws DuplicatedResourceException  {
-		preventResourceIdBreach(bidToCreate.getBidId());
+	public BidDto create(BidDto bidToCreate) throws NotAllowedIdSettingException  {
+		preventResourceIdBreach(bidToCreate);
 		bidRepository.save(bidMapper.bidDtoToBid(bidToCreate));
 		return bidToCreate;
 	}
@@ -61,9 +60,9 @@ public class BidDao implements IGenericCrudDao<BidDto,Integer>  {
 		return bidToDelete;
 	}
 	
-	private void preventResourceIdBreach(Integer bidId) throws DuplicatedResourceException {
-		if(bidRepository.existsById(bidId))
-			throw new DuplicatedResourceException("Not allowed to set an id to resources.");
+	private void preventResourceIdBreach(BidDto bidToCreate) throws NotAllowedIdSettingException {
+		if(bidToCreate.getBidId()!=null)		
+			throw new NotAllowedIdSettingException("Not allowed to set an id to resources.");
 	}
 
 	private void checkResourceExistence(Integer bidId) throws ResourceNotFoundException {

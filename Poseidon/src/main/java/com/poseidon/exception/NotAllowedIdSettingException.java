@@ -4,15 +4,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-public class DuplicatedResourceException extends Exception{
+public class NotAllowedIdSettingException extends Exception{
 
 	private static final long serialVersionUID = 1L;
 
-	public DuplicatedResourceException() {
+	public NotAllowedIdSettingException() {
 		super();
 	}
 
-	public DuplicatedResourceException(String message) {
+	public NotAllowedIdSettingException(String message) {
 		super(message);
 	}
 	

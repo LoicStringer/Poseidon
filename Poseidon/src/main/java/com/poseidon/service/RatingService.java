@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.poseidon.dao.RatingDao;
 import com.poseidon.dto.RatingDto;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 
 @Service
@@ -25,7 +25,7 @@ public class RatingService implements IGenericService<RatingDto,Integer> {
 	}
 
 	@Override
-	public RatingDto create(RatingDto dtoToCreate) throws DuplicatedResourceException {
+	public RatingDto create(RatingDto dtoToCreate) throws NotAllowedIdSettingException {
 		return ratingDao.create(dtoToCreate);
 	}
 

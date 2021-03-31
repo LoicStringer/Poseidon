@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.poseidon.dao.BidDao;
 import com.poseidon.dto.BidDto;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 
 @Service
@@ -25,7 +25,7 @@ public class BidService implements IGenericService<BidDto,Integer>{
 	}
 
 	@Override
-	public BidDto create(BidDto dtoToCreate) throws DuplicatedResourceException {
+	public BidDto create(BidDto dtoToCreate) throws NotAllowedIdSettingException {
 		return bidDao.create(dtoToCreate);
 	}
 

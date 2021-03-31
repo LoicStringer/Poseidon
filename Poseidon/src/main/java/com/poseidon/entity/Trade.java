@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.DecimalMin;
 
 
 @Entity
@@ -17,7 +16,7 @@ public class Trade {
    
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="trade_id",length = 4)
+	@Column(name="trade_id")
 	private Integer tradeId;
 	
 	@Column(name="account",length = 30)

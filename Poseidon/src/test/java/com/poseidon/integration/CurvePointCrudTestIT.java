@@ -22,17 +22,16 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.poseidon.dto.BidDto;
+import com.poseidon.dto.CurvePointDto;
 import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
-
 
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser(authorities= {"USER","ADMIN"})
 @Transactional
-class BidCrudTestIT {
+public class CurvePointCrudTestIT {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -41,76 +40,75 @@ class BidCrudTestIT {
 	private ObjectMapper objectMapper;
 
 	@Test
-	void getBidsListTest() throws Exception {
+	void getCurvePointsListTest() throws Exception {
 		
-		mockMvc.perform(get("/poseidon/api/bids"))
+		mockMvc.perform(get("/poseidon/api/curvePoints"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.[0].account").value("GamblingAccount"));
+				.andExpect(jsonPath("$.[0].curveId").value(1));
 	}
 	
 	@Test
-	void getOneBidTest() throws Exception {
+	void getOneCurvePointTest() throws Exception {
 		
-		mockMvc.perform(get("/poseidon/api/bids/1"))
+		mockMvc.perform(get("/poseidon/api/curvePoints/1"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.account").value("GamblingAccount"));
+				.andExpect(jsonPath("$.curveId").value(1));
 	}
 	
 	@Test
-	void addBidTest() throws Exception {
+	void addCurvePointTest() throws Exception {
 		
-		BidDto bidToAdd = new BidDto();
-		bidToAdd.setAccount("NarcoticsAccount");
-		bidToAdd.setType("Narcotics");
+		CurvePointDto curvePointToAdd = new CurvePointDto();
+		curvePointToAdd.setCurveId(1);
+		curvePointToAdd.setValue(10.00);
 		
-		mockMvc.perform(post("/poseidon/api/bids")
-				.content(objectMapper.writeValueAsString(bidToAdd))
+		mockMvc.perform(post("/poseidon/api/curvePoints")
+				.content(objectMapper.writeValueAsString(curvePointToAdd))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.account").value("NarcoticsAccount"));
-	}
-	
-	
-	@Test
-	void updateBidTest() throws Exception {
-		
-		BidDto bidToUpdate = new BidDto();
-		bidToUpdate.setBidId(2);
-		bidToUpdate.setAccount("NarcoticsAccount");
-		bidToUpdate.setType("Narcotics");
-		
-		mockMvc.perform(put("/poseidon/api/bids/2")
-				.content(objectMapper.writeValueAsString(bidToUpdate))
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.account").value("NarcoticsAccount"));
+				.andExpect(jsonPath("$.curveId").value(1));
 	}
 	
 	@Test
-	void deleteBidTest() throws Exception {
+	void updateCurvePointTest() throws Exception {
 		
-		BidDto bidToDelete = new BidDto();
-		bidToDelete.setBidId(1);
-		bidToDelete.setAccount("GamblingAccount");
-		bidToDelete.setType("Gambling");
+		CurvePointDto curvePointToUpdate = new CurvePointDto();
+		curvePointToUpdate.setCurvePointId(2);
+		curvePointToUpdate.setCurveId(3);
+		curvePointToUpdate.setValue(50.00);
 		
-		mockMvc.perform(delete("/poseidon/api/bids/1")
-				.content(objectMapper.writeValueAsString(bidToDelete))
+		mockMvc.perform(put("/poseidon/api/curvePoints/2")
+				.content(objectMapper.writeValueAsString(curvePointToUpdate))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.account").value("GamblingAccount"));
+				.andExpect(jsonPath("$.value").value(50));
+	}
+	
+	@Test
+	void deleteCurvePointTest() throws Exception {
+		
+		CurvePointDto curvePointToDelete = new CurvePointDto();
+		curvePointToDelete.setCurvePointId(1);
+		curvePointToDelete.setCurveId(1);
+		curvePointToDelete.setValue(10.00);
+		
+		mockMvc.perform(delete("/poseidon/api/curvePoints/1")
+				.content(objectMapper.writeValueAsString(curvePointToDelete))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.value").value(10.00));
 	}
 	
 	@Test
 	void isExpectedExceptionThrownWhenTryingToSetAnIdBeforeAddingResourceTest() throws JsonProcessingException, Exception {
 		
-		BidDto bidToAdd = new BidDto();
-		bidToAdd.setBidId(1);
-		bidToAdd.setAccount("NarcoticsAccount");
-		bidToAdd.setType("Narcotics");
+		CurvePointDto curvePointToAdd = new CurvePointDto();
+		curvePointToAdd.setCurvePointId(1);
+		curvePointToAdd.setCurveId(1);
+		curvePointToAdd.setValue(10.00);
 		
-		mockMvc.perform(post("/poseidon/api/bids")
-				.content(objectMapper.writeValueAsString(bidToAdd))
+		mockMvc.perform(post("/poseidon/api/curvePoints")
+				.content(objectMapper.writeValueAsString(curvePointToAdd))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is4xxClientError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof NotAllowedIdSettingException))
@@ -120,54 +118,55 @@ class BidCrudTestIT {
 	@Test
 	void isExpectedExceptionThrownWhenResourceIsNotFoundTest() throws Exception{
 		
-		mockMvc.perform(get("/poseidon/api/bids/10"))
+		mockMvc.perform(get("/poseidon/api/curvePoints/10"))
 		.andExpect(status().is4xxClientError())
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException))
-		.andExpect(result -> assertEquals("Bid with id 10 not found", result.getResolvedException().getMessage()));
+		.andExpect(result -> assertEquals("Curve point with id 10 not found.", result.getResolvedException().getMessage()));
 	}
 	
 	@Test
 	void isExpectedExceptionThrownWhenUriIdIsDifferentFromResourceIdTest() throws JsonProcessingException, Exception {
 		
-		BidDto bidToUpdate = new BidDto();
-		bidToUpdate.setBidId(2);
-		bidToUpdate.setAccount("NarcoticsAccount");
-		bidToUpdate.setType("Narcotics");
+		CurvePointDto curvePointToUpdate = new CurvePointDto();
+		curvePointToUpdate.setCurvePointId(2);
+		curvePointToUpdate.setCurveId(2);
+		curvePointToUpdate.setValue(20.00);
 		
-		mockMvc.perform(put("/poseidon/api/bids/1")
-				.content(objectMapper.writeValueAsString(bidToUpdate))
+		mockMvc.perform(put("/poseidon/api/curvePoints/1")
+				.content(objectMapper.writeValueAsString(curvePointToUpdate))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is4xxClientError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException))
-				.andExpect(result -> assertEquals("The requested bid's id 1 is different from the currently handled bid's id.", result.getResolvedException().getMessage()));
+				.andExpect(result -> assertEquals("The requested curve point's id 1 is different from the currently handled curve point's id.", result.getResolvedException().getMessage()));
 	}
 	
 	@Test
 	void isExpectedExceptionThrownWhenTryingToHandleUnexistingResourceTest() throws JsonProcessingException, Exception{
 		
-		BidDto bidToUpdate = new BidDto();
-		bidToUpdate.setBidId(10);
-		bidToUpdate.setAccount("NarcoticsAccount");
-		bidToUpdate.setType("Narcotics");
+		CurvePointDto curvePointToUpdate = new CurvePointDto();
+		curvePointToUpdate.setCurvePointId(10);
+		curvePointToUpdate.setCurveId(10);
+		curvePointToUpdate.setValue(100.00);
 		
-		mockMvc.perform(put("/poseidon/api/bids/10")
-				.content(objectMapper.writeValueAsString(bidToUpdate))
+		mockMvc.perform(put("/poseidon/api/curvePoints/10")
+				.content(objectMapper.writeValueAsString(curvePointToUpdate))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is4xxClientError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException))
-				.andExpect(result -> assertEquals("The bid with 10 id number is not registered.", result.getResolvedException().getMessage()));
+				.andExpect(result -> assertEquals("The curve point with 10 id number is not registered.", result.getResolvedException().getMessage()));
 	}
 	
 	@Test
 	void isExpectedExceptionThrownWhenTryingToCreateInvalidResourceTest() throws JsonProcessingException, Exception {
 		
-		BidDto bidToAdd = new BidDto();
-		bidToAdd.setAccount("NarcoticsAccount");
-	
-		mockMvc.perform(post("/poseidon/api/bids")
-				.content(objectMapper.writeValueAsString(bidToAdd))
+		CurvePointDto curvePointToAdd = new CurvePointDto();
+		curvePointToAdd.setCurveId(-10);
+		
+		mockMvc.perform(post("/poseidon/api/curvePoints")
+				.content(objectMapper.writeValueAsString(curvePointToAdd))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is4xxClientError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
 	}
+	
 }

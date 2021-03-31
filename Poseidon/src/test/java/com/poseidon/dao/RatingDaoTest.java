@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.poseidon.dto.RatingDto;
 import com.poseidon.entity.Rating;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.mapper.RatingMapper;
 import com.poseidon.repository.RatingRepository;
@@ -69,10 +69,14 @@ public class RatingDaoTest {
 		}
 
 		@Test
-		void createTest() throws DuplicatedResourceException {
-			when(ratingMapper.ratingDtoToRating(testedRatingDto)).thenReturn(testedRating);
-			when(ratingRepository.save(any(Rating.class))).thenReturn(testedRating);
-			assertEquals(testedRatingDto, ratingDao.create(testedRatingDto));
+		void createTest() throws NotAllowedIdSettingException {
+			Rating ratingToCreate = new Rating();
+			ratingToCreate.setOrderNumber(1);
+			RatingDto ratingDtoToCreate = new RatingDto(); 
+			ratingDtoToCreate.setOrderNumber(1);
+			when(ratingMapper.ratingDtoToRating(ratingDtoToCreate)).thenReturn(ratingToCreate);
+			when(ratingRepository.save(any(Rating.class))).thenReturn(ratingToCreate);
+			assertEquals(ratingDtoToCreate, ratingDao.create(ratingDtoToCreate));
 		}
 
 		@Test
@@ -109,8 +113,7 @@ public class RatingDaoTest {
 		
 		@Test
 		void isExpectedExceptionThrownWhenTryingToSetAnIdBeforeCreate() {
-			when(ratingRepository.existsById(any(Integer.class))).thenReturn(true);
-			assertThrows(DuplicatedResourceException.class,()->ratingDao.create(testedRatingDto));
+			assertThrows(NotAllowedIdSettingException.class,()->ratingDao.create(testedRatingDto));
 		}
 		
 		@Test

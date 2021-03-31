@@ -11,7 +11,7 @@ INSERT INTO rating (rating_id, moodys_rating) VALUES (1, "Aa1");
 INSERT INTO rating (rating_id, moodys_rating) VALUES (2, "Aa2");
 
 INSERT INTO rule (rule_id, name) VALUES (1, "TallionRule");
-INSERT INTO rule (rule_id, name) VALUES (2, "StrongerRule");
+INSERT INTO rule (rule_id, name) VALUES (2, "StrongestRule");
 
 INSERT INTO trade (trade_id, account) VALUEs (1, "NbaAccount");
 INSERT INTO trade (trade_id, account) VALUEs (2, "MlbAccount");

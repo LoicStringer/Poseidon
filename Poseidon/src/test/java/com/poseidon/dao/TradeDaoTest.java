@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.poseidon.dto.TradeDto;
 import com.poseidon.entity.Trade;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 import com.poseidon.mapper.TradeMapper;
 import com.poseidon.repository.TradeRepository;
@@ -67,14 +67,17 @@ public class TradeDaoTest {
 			when(tradeRepository.findAll()).thenReturn(tradesList);
 			assertEquals(tradeDtosList, tradeDao.getAllList());
 		}
-
 		@Test
-		void createTest() throws DuplicatedResourceException {
-			when(tradeMapper.tradeDtoToTrade(testedTradeDto)).thenReturn(testedTrade);
-			when(tradeRepository.save(any(Trade.class))).thenReturn(testedTrade);
-			assertEquals(testedTradeDto, tradeDao.create(testedTradeDto));
+		void createTest() throws NotAllowedIdSettingException {
+			Trade tradeToCreate = new Trade();
+			tradeToCreate.setAccount("GamblingAccount");
+			TradeDto tradeDtoToCreate = new TradeDto(); 
+			tradeDtoToCreate.setAccount("GamblingAccount");
+			when(tradeMapper.tradeDtoToTrade(tradeDtoToCreate)).thenReturn(tradeToCreate);
+			when(tradeRepository.save(any(Trade.class))).thenReturn(tradeToCreate);
+			assertEquals(tradeDtoToCreate, tradeDao.create(tradeDtoToCreate));
 		}
-
+		
 		@Test
 		void readTest() throws ResourceNotFoundException {
 			when(tradeMapper.tradeToTradeDto(testedTrade)).thenReturn(testedTradeDto);
@@ -109,8 +112,7 @@ public class TradeDaoTest {
 		
 		@Test
 		void isExpectedExceptionThrownWhenTryingToSetAnIdBeforeCreate() {
-			when(tradeRepository.existsById(any(Integer.class))).thenReturn(true);
-			assertThrows(DuplicatedResourceException.class,()->tradeDao.create(testedTradeDto));
+			assertThrows(NotAllowedIdSettingException.class,()->tradeDao.create(testedTradeDto));
 		}
 		
 		@Test

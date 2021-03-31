@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.poseidon.dao.RuleDao;
 import com.poseidon.dto.RuleDto;
-import com.poseidon.exception.DuplicatedResourceException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.ResourceNotFoundException;
 
 @Service
@@ -25,7 +25,7 @@ public class RuleService implements IGenericService<RuleDto,Integer>{
 	}
 
 	@Override
-	public RuleDto create(RuleDto dtoToCreate) throws DuplicatedResourceException {
+	public RuleDto create(RuleDto dtoToCreate) throws NotAllowedIdSettingException {
 		return ruleDao.create(dtoToCreate);
 	}
 

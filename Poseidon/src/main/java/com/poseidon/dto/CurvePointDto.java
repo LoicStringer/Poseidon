@@ -3,7 +3,7 @@ package com.poseidon.dto;
 import java.sql.Timestamp;
 
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import org.springframework.stereotype.Component;
@@ -13,15 +13,17 @@ public class CurvePointDto {
 
 	private Integer curvePointId;
 	
-	@Positive(message="Must a positive number")
-	@NotBlank(message="Must not be null")
+	@Positive(message="Must be a positive number")
+	@NotNull(message="Must not be null")
 	private Integer curveId;
 	
 	private Timestamp asOfDate;
 	
+	@Positive
 	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double term;
 	
+	@Positive
 	@DecimalMin(value="0.0", message = "This must be a positive decimal number")
 	private Double value;
 

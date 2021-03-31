@@ -18,10 +18,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.poseidon.dto.UserDto;
 import com.poseidon.entity.User;
 import com.poseidon.exception.DuplicatedUserException;
+import com.poseidon.exception.NotAllowedIdSettingException;
 import com.poseidon.exception.UserNotFoundException;
 import com.poseidon.mapper.UserMapper;
 import com.poseidon.repository.UserRepository;
@@ -35,6 +37,9 @@ public class UserDaoTest {
 
 	@Mock
 	private UserMapper userMapper;
+	
+	@Mock
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@InjectMocks
 	private UserDao userDao;
@@ -49,11 +54,13 @@ public class UserDaoTest {
 		testedUser = new User();
 		testedUser.setUserId(1);
 		testedUser.setUserName("Serpico");
+		testedUser.setUserPassword("corruption");
 		usersList = new ArrayList<User>();
 		usersList.add(testedUser);
 		testedUserDto = new UserDto();
 		testedUserDto.setUserId(1);
 		testedUserDto.setUserName("Serpico");
+		testedUserDto.setUserPassword("corruption");
 		userDtosList = new ArrayList<UserDto>();
 		userDtosList.add(testedUserDto);
 	}
@@ -71,10 +78,18 @@ public class UserDaoTest {
 		}
 
 		@Test
-		void createTest() throws DuplicatedUserException {
-			when(userMapper.userDtoToUser(testedUserDto)).thenReturn(testedUser);
-			when(userRepository.save(any(User.class))).thenReturn(testedUser);
-			assertEquals(testedUserDto, userDao.create(testedUserDto));
+		void createTest() throws DuplicatedUserException, NotAllowedIdSettingException {
+			User userToCreate = new User();
+			userToCreate.setUserName("Tony");
+			userToCreate.setUserPassword("narcotics");
+			UserDto userDtoToCreate = new UserDto(); 
+			userDtoToCreate.setUserName("Tony");
+			userDtoToCreate.setUserPassword("narcotics");
+			when(userRepository.findByUserName(any(String.class))).thenReturn(null);
+			when(bCryptPasswordEncoder.encode(any(CharSequence.class))).thenReturn(userToCreate.getUserPassword());
+			when(userMapper.userDtoToUser(userDtoToCreate)).thenReturn(userToCreate);
+			when(userRepository.save(any(User.class))).thenReturn(userToCreate);
+			assertEquals(userDtoToCreate, userDao.create(userDtoToCreate));
 		}
 
 		@Test
@@ -88,6 +103,7 @@ public class UserDaoTest {
 		void updateTest() throws UserNotFoundException {
 			when(userMapper.userDtoToUser(testedUserDto)).thenReturn(testedUser);
 			when(userRepository.existsById(any(Integer.class))).thenReturn(true);
+			when(bCryptPasswordEncoder.encode(any(CharSequence.class))).thenReturn(testedUser.getUserPassword());
 			when(userRepository.save(any(User.class))).thenReturn(testedUser);
 			assertEquals(testedUserDto, userDao.update(1, testedUserDto));
 		}
@@ -111,15 +127,17 @@ public class UserDaoTest {
 		
 		@Test
 		void isExpectedExceptionThrownWhenTryingToSetAnIdBeforeCreate() {
-			when(userRepository.findByUserName(any(String.class))).thenReturn(null);
-			when(userRepository.existsById(any(Integer.class))).thenReturn(true);
-			assertThrows(DuplicatedUserException.class,()->userDao.create(testedUserDto));
+			assertThrows(NotAllowedIdSettingException.class,()->userDao.create(testedUserDto));
 		}
 		
 		@Test
 		void isExpectedExceptionThrownWhenTryingToCreateAlreadyRegisteredUserTest() {
-			when(userRepository.findByUserName(any(String.class))).thenReturn(Optional.of(testedUser));
-			assertThrows(DuplicatedUserException.class,()->userDao.create(testedUserDto));
+			User userToCreate = new User();
+			userToCreate.setUserName("Tony");
+			UserDto userDtoToCreate = new UserDto(); 
+			userDtoToCreate.setUserName("Tony");
+			when(userRepository.findByUserName(any(String.class))).thenReturn(Optional.of(userToCreate));
+			assertThrows(DuplicatedUserException.class,()->userDao.create(userDtoToCreate));
 		}
 		
 		@Test
