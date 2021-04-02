@@ -3,6 +3,8 @@ package com.poseidon.dao;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +17,8 @@ import com.poseidon.repository.RatingRepository;
 
 @Repository
 public class RatingDao implements IGenericCrudDao<RatingDto,Integer>  {
+	
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private RatingMapper ratingMapper;
@@ -61,18 +65,24 @@ public class RatingDao implements IGenericCrudDao<RatingDto,Integer>  {
 	}
 
 	private void preventResourceIdBreach(RatingDto ratingToCreate) throws NotAllowedIdSettingException {
-		if(ratingToCreate.getRatingId()!=null)
+		if(ratingToCreate.getRatingId()!=null) {
+			log.error("Id has been set to this bid before insert.");
 			throw new NotAllowedIdSettingException("Not allowed to set an id to resources.");
+		}
 	}
 
 	private void checkResourceExistence(Integer ratingId) throws ResourceNotFoundException {
-		if(!ratingRepository.existsById(ratingId))
+		if(!ratingRepository.existsById(ratingId)) {
+			log.error("The rating's id number "+ratingId+ "doesn't match any registered rating's id.");
 			throw new ResourceNotFoundException("The rating with "+ratingId+ " id number is not registered.");
+		}
 	}
 	
 	private void checkResourceIdCoherence(Integer targetRatingId, Integer treatedRatingId) throws ResourceNotFoundException {
-		if(!targetRatingId.equals(treatedRatingId))
+		if(!targetRatingId.equals(treatedRatingId)) {
+			log.error("The uri's id is different from the rating's id currently handled");
 			throw new ResourceNotFoundException("The requested rating's id "+targetRatingId+ " is different from the currently handled rating's id.");
+		}
 	}
 	
 }

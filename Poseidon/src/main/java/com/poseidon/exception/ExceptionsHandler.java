@@ -7,8 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@RestControllerAdvice
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
@@ -20,6 +22,14 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<ExceptionResponse>(exceptionResponse, getHttpStatusFromException(ex));
 	}
 
+	@ExceptionHandler(NotAllowedIdSettingException.class)
+	public ResponseEntity<ExceptionResponse> handleNotAllowedIdSettingException(NotAllowedIdSettingException ex) {
+
+		ExceptionResponse exceptionResponse = exceptionResponseBuild(ex);
+
+		return new ResponseEntity<ExceptionResponse>(exceptionResponse, getHttpStatusFromException(ex));
+	}
+	
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ExceptionResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
 
